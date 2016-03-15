@@ -28,7 +28,7 @@ void draw() {
   drawStave();
   drawPlayHead();
   drawNotes();
-  playNotes();
+  //playNotes();
 }
 
 void drawStave() {

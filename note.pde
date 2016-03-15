@@ -2,7 +2,6 @@ class Note {
   int x, y;
   boolean playing;
   Ani growAni,shrinkAni;
-  SoundFile soundfile;
   
   float diameter = 20;
   float startDiameter = 0;
@@ -13,8 +12,7 @@ class Note {
     y = yPos;
     playing = false;
     
-    soundfile = new SoundFile(twinklr_test.this,"a3.mp3");
-    
+   
     growAni = new Ani(this, 0.1, "startDiameter", diameter, Ani.LINEAR);
     shrinkAni = new Ani(this, 0.1, "startDiameter", 0.0, Ani.LINEAR, "onEnd:remove");  
     
@@ -35,11 +33,8 @@ class Note {
   
   void play() {
     if(intersectedBy(playheadPos) && !playing) {
-      playing = true;
-      soundfile.play();
-      println("SFDuration= " + soundfile.duration() + " seconds");
+      //playing = true;
     }
-
   }
   
   void destroy() {
