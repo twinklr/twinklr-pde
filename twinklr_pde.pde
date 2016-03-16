@@ -12,8 +12,10 @@ void setup() {
   Ani.init(this);
   Ani.noAutostart();
 
-  Soundbox soundbox = new Soundbox(this);
-  stave = new Stave(15, this);
+  int noteCount = 15;
+
+  Soundbox soundbox = new Soundbox(noteCount, this);
+  stave = new Stave(noteCount, this);
   playhead = new Playhead(stave, this);
 }
 

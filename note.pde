@@ -1,7 +1,7 @@
 class Note {
   int x, y;
   boolean playing;
-  Ani growAni,shrinkAni;
+  Ani growAni, shrinkAni;
   PApplet parent;
   Stave stave;
   Playhead playhead;
@@ -23,11 +23,11 @@ class Note {
     shrinkAni = new Ani(this, 0.1, "startDiameter", 0.0, Ani.LINEAR, "onEnd:remove");  
     
     growAni.start();
-}
+  }
 
   void draw() {
     if(intersectedBy(playhead.position)) {
-      strokeWeight(2);
+      strokeWeight(3);
       stroke(128,0,0);
     } else {
       noStroke();

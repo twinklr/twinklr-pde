@@ -7,8 +7,10 @@ class Soundbox {
   String[] allNotes, scaleNotes;
   SoundFile[] allSounds, scaleSounds;
   PApplet parent;
+  int noteCount;
 
-  Soundbox (PApplet parent) {  
+  Soundbox (int nc, PApplet parent) {  
+    noteCount = nc;
     this.parent = parent;
 
     buildScales();
@@ -67,9 +69,9 @@ class Soundbox {
 
     }
 
-    if(scaleNotes.length > 15) {
-      scaleNotes = subset(scaleNotes,0,15);
-      scaleSounds = (SoundFile[]) subset(scaleSounds,0,15);
+    if(scaleNotes.length > noteCount) {
+      scaleNotes = subset(scaleNotes,0,noteCount);
+      scaleSounds = (SoundFile[]) subset(scaleSounds,0,noteCount);
     }
   }
 
