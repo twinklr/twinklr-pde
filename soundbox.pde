@@ -81,8 +81,44 @@ class Soundbox {
   }
 
   void playSound(int i) {
-    scaleSounds[i].stop();
-    scaleSounds[i].play();
+    if(i < scaleSounds.length) {
+      scaleSounds[i].stop();
+      scaleSounds[i].play();
+    }
+  }
+
+  void cycleScale() {
+    String curScale = scaleType;
+    Object[] allScales = scales.keySet().toArray();
+
+    // if it's the last one
+    if(curScale == (String) allScales[allScales.length-1]) {
+      scaleType = (String) allScales[0];
+    } else {
+      for(int i = 0; i < allScales.length; i++) {
+        if(curScale == (String) allScales[i]) {
+          scaleType = (String) allScales[i+1];
+          break;
+        }
+      }
+    }
+    loadScaleSounds(scaleType, scaleRoot);
+  }
+
+  void cycleRoot() {
+    String curRoot = scaleRoot;
+    String[] notes = {"c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b"};
+    if(curRoot == notes[notes.length-1]) {
+      scaleRoot = notes[0];
+    } else {
+      for(int i = 0; i < notes.length; i++) {
+        if(curRoot == notes[i]) {
+          scaleRoot = notes[i+1];
+          break;
+        }
+      } 
+    }
+    loadScaleSounds(scaleType, scaleRoot);
   }
 
   private void setupAllSounds() {
