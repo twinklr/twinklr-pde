@@ -81,7 +81,7 @@ class Stave {
     return lineCount - lineIndex;
   }
 
-  void directionChanged() {
+  void resetNotes() {
     for (Note note : notes) {
       note.played = false;
     }
