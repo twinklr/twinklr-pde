@@ -1,15 +1,15 @@
 class Stave {
-  int noteCount, staveWidth, staveHeight, xPadding, yPadding;
+  int noteCount, staveWidth, staveHeight, xPadding, yPadding, lineHeight, lineCount;
+  Soundbox soundBox;
   PApplet parent;
   ArrayList<Note> notes;
 
-  Stave (int nc, PApplet parent) {  
+  Stave (int nc, Soundbox s, PApplet parent) {  
     this.parent = parent;
     this.noteCount = nc;
-
+    this.soundBox = s;
     this.notes = new ArrayList<Note>();
     
-
     xPadding = 50;
     yPadding = 30;
 
@@ -21,9 +21,9 @@ class Stave {
     staveWidth = width - (xPadding*2);
     staveHeight = height - (yPadding*2);
 
-    int lineCount = noteCount - 1;
+    lineCount = noteCount - 1;
 
-    int lineHeight = floor(staveHeight / lineCount);
+    lineHeight = floor(staveHeight / lineCount);
 
     // Draw gray box
     noFill();
@@ -56,19 +56,42 @@ class Stave {
   void click(int x, int y) {
     boolean add = true;
     // first, for each note, is it inside?
+
+    int localX = x - xPadding;
+    int localY = y - yPadding;
     
      for (int i = 0; i < notes.size(); i++) {
        Note note = notes.get(i);
-       if(note.intersectedBy(x-xPadding,y)) {
+       if(note.intersectedBy(localX, localY)) {
          note.destroy();
          add = false;
       }
      }
 
     if(add) {
-      Note n = new Note(x-stave.xPadding, y, this, playhead, parent);
+      Note n = new Note(localX, localY, this, playhead, parent);
     
       notes.add(n);
     }
+  }
+
+  int indexOfNote(Note n) {
+    int lineIndex = (int) Math.floor((n.y + (lineHeight/2)) / lineHeight);
+    // this is index from top downwards. so we have to flip it, because music goes bottom-to-top:
+    return lineCount - lineIndex;
+  }
+
+  void directionChanged() {
+    for (Note note : notes) {
+      note.played = false;
+    }
+  }
+
+  int getColorIndexForNote(Note n) {
+    int noteIndex = indexOfNote(n);
+
+    // now ask the current scale what that is in its terms
+    return soundBox.getScaleIndexFromAbsolute(noteIndex);
+
   }
 }

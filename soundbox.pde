@@ -75,6 +75,11 @@ class Soundbox {
     }
   }
 
+  int getScaleIndexFromAbsolute(int i) {
+    int scaleLength = scales.get(scaleType).length;
+    return (i % scaleLength);
+  }
+
   private void setupAllSounds() {
     // now: calculate all possible notes
       

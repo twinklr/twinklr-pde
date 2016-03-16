@@ -1,6 +1,6 @@
 class Note {
-  int x, y;
-  boolean playing;
+  int x, y, scaleIndex;
+  boolean played;
   Ani growAni, shrinkAni;
   PApplet parent;
   Stave stave;
@@ -16,9 +16,8 @@ class Note {
     this.stave = s;
     this.playhead = pl;
     this.parent = p;
-    playing = false;
+    played = false;
     
-   
     growAni = new Ani(this, 0.1, "startDiameter", diameter, Ani.LINEAR);
     shrinkAni = new Ani(this, 0.1, "startDiameter", 0.0, Ani.LINEAR, "onEnd:remove");  
     
@@ -26,20 +25,29 @@ class Note {
   }
 
   void draw() {
+    // get colour for note
+    int i = stave.getColorIndexForNote(this);
+
+    color c = colorFromColorIndex(i);
+
     if(intersectedBy(playhead.position)) {
       strokeWeight(3);
       stroke(128,0,0);
     } else {
       noStroke();
     }
-    fill(0,255,0); 
+    fill(c); 
+
+    int absX = x + stave.xPadding;
+    int absY = y + stave.yPadding;
     
-    ellipse(x+stave.xPadding,y,startDiameter,startDiameter);
+    ellipse(absX, absY,startDiameter,startDiameter);
   }
   
   void play() {
-    if(intersectedBy(playhead.position) && !playing) {
-      //playing = true;
+    if(intersectedBy(playhead.position) && !played) {
+      println(stave.indexOfNote(this));
+      played = true;
     }
   }
   
@@ -70,5 +78,19 @@ class Note {
     } else {
       return false;
     }
+  }
+
+  private color colorFromColorIndex(int i) {
+    color[] colors = new color[0];
+
+    colors = append(colors, color(245, 120, 107));
+    colors = append(colors, color(255, 206, 42));
+    colors = append(colors, color(254, 178, 196));
+    colors = append(colors, color(200, 214, 87));
+    colors = append(colors, color(176, 60, 164));
+    colors = append(colors, color(255, 179, 38));
+    colors = append(colors, color(126, 212, 210));
+
+    return colors[i];
   }
 }

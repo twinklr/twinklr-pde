@@ -15,7 +15,7 @@ void setup() {
   int noteCount = 15;
 
   Soundbox soundbox = new Soundbox(noteCount, this);
-  stave = new Stave(noteCount, this);
+  stave = new Stave(noteCount, soundbox, this);
   playhead = new Playhead(stave, this);
 }
 

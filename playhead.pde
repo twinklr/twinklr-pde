@@ -1,5 +1,6 @@
 class Playhead {
   int position;
+  int direction;
   PApplet parent;
   Stave stave;
 
@@ -8,6 +9,7 @@ class Playhead {
     this.stave = s;
 
     position = 0;
+    direction = 1;
   }
 
   void render() {
@@ -23,5 +25,15 @@ class Playhead {
 
   void modifyPositionBy(float amt) {
     position += amt;
+
+    // notify stave if we've changed direction
+    if((direction == 1) && (amt < 0)) {
+      direction = 1 - direction;
+      stave.directionChanged();
+    }
+    if((direction == 0) && (amt > 0)) {
+      direction = 1 - direction;
+      stave.directionChanged();
+    }
   }
 }
