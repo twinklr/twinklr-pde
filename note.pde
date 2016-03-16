@@ -4,15 +4,17 @@ class Note {
   Ani growAni,shrinkAni;
   PApplet parent;
   Stave stave;
+  Playhead playhead;
   
   float diameter = 20;
   float startDiameter = 0;
   float radius = diameter / 2;
   
-  Note(int xPos, int yPos, Stave s, PApplet p) {
+  Note(int xPos, int yPos, Stave s, Playhead pl, PApplet p) {
     x = xPos;
     y = yPos;
     this.stave = s;
+    this.playhead = pl;
     this.parent = p;
     playing = false;
     
@@ -24,7 +26,7 @@ class Note {
 }
 
   void draw() {
-    if(intersectedBy(playheadPos)) {
+    if(intersectedBy(playhead.position)) {
       strokeWeight(2);
       stroke(128,0,0);
     } else {
@@ -36,7 +38,7 @@ class Note {
   }
   
   void play() {
-    if(intersectedBy(playheadPos) && !playing) {
+    if(intersectedBy(playhead.position) && !playing) {
       //playing = true;
     }
   }

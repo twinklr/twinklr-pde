@@ -1,11 +1,10 @@
 import de.looksgood.ani.*;
 import processing.sound.*;
 
-int playheadPos = 0;
-
 int noteDiameter = 20;
 
 Stave stave;
+Playhead playhead;
 
 ArrayList<Note> notes = new ArrayList<Note>();
 
@@ -19,28 +18,15 @@ void setup() {
 
   Soundbox soundbox = new Soundbox(this);
   stave = new Stave(15, this);
-
+  playhead = new Playhead(stave, this);
 }
 
 void draw() {
   background(255);
   stave.render();
-  drawPlayHead();
-  // drawNotes();
+  playhead.render();
+  drawNotes();
   //playNotes();
-}
-
-
-
-void drawPlayHead() {
-  strokeWeight(2);
-  stroke(128,0,0);  
-  int absPos = playheadPos % stave.staveWidth;
-  if(absPos < 0) {
-    absPos = stave.staveWidth + absPos;
-  }
-  int x = absPos + stave.xPadding;
-  line(x,0,x,height);
 }
 
 void drawNotes() {
@@ -66,7 +52,7 @@ void mouseReleased() {
    }
 
   if(add) {
-    Note n = new Note(mouseX-stave.xPadding,mouseY, stave, this);
+    Note n = new Note(mouseX-stave.xPadding,mouseY, stave, playhead, this);
   
     notes.add(n);
   }
@@ -74,6 +60,5 @@ void mouseReleased() {
 
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
-  playheadPos += e;
-  //println(e);
+  playhead.modifyPositionBy(e);
 }
