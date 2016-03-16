@@ -80,6 +80,11 @@ class Soundbox {
     return (i % scaleLength);
   }
 
+  void playSound(int i) {
+    scaleSounds[i].stop();
+    scaleSounds[i].play();
+  }
+
   private void setupAllSounds() {
     // now: calculate all possible notes
       

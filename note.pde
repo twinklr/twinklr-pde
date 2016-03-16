@@ -46,7 +46,8 @@ class Note {
   
   void play() {
     if(intersectedBy(playhead.position) && !played) {
-      println(stave.indexOfNote(this));
+      // println(stave.indexOfNote(this));
+      stave.soundBox.playSound(stave.indexOfNote(this));
       played = true;
     }
   }
