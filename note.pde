@@ -2,14 +2,18 @@ class Note {
   int x, y;
   boolean playing;
   Ani growAni,shrinkAni;
+  PApplet parent;
+  Stave stave;
   
   float diameter = 20;
   float startDiameter = 0;
   float radius = diameter / 2;
   
-  Note(int xPos, int yPos) {
+  Note(int xPos, int yPos, Stave s, PApplet p) {
     x = xPos;
     y = yPos;
+    this.stave = s;
+    this.parent = p;
     playing = false;
     
    
@@ -28,7 +32,7 @@ class Note {
     }
     fill(0,255,0); 
     
-    ellipse(x+xPadding,y,startDiameter,startDiameter);
+    ellipse(x+stave.xPadding,y,startDiameter,startDiameter);
   }
   
   void play() {
