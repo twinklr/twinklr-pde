@@ -6,7 +6,7 @@ class Note {
   Stave stave;
   Playhead playhead;
   
-  float diameter = 20;
+  float diameter = 30;
   float startDiameter = 0;
   float radius = diameter / 2;
   
@@ -49,7 +49,7 @@ class Note {
   }
   
   void remove() {
-    notes.remove(this);
+    stave.notes.remove(this);
   }
   
   boolean intersectedBy(int xPos) {

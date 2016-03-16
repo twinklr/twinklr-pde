@@ -1,10 +1,13 @@
 class Stave {
   int noteCount, staveWidth, staveHeight, xPadding, yPadding;
   PApplet parent;
+  ArrayList<Note> notes;
 
   Stave (int nc, PApplet parent) {  
     this.parent = parent;
     this.noteCount = nc;
+
+    this.notes = new ArrayList<Note>();
     
 
     xPadding = 50;
@@ -40,6 +43,32 @@ class Stave {
       int x2 = x1 + staveWidth;
       int y2 = yPadding + (i* lineHeight);
       line(x1, y1, x2, y2);
+    }
+  }
+
+  void drawNotes() {
+    for (Note note : notes) {
+      note.draw();
+      note.play();
+    }
+  }
+
+  void click(int x, int y) {
+    boolean add = true;
+    // first, for each note, is it inside?
+    
+     for (int i = 0; i < notes.size(); i++) {
+       Note note = notes.get(i);
+       if(note.intersectedBy(x-xPadding,y)) {
+         note.destroy();
+         add = false;
+      }
+     }
+
+    if(add) {
+      Note n = new Note(x-stave.xPadding, y, this, playhead, parent);
+    
+      notes.add(n);
     }
   }
 }
