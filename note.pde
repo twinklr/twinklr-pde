@@ -1,13 +1,14 @@
 class Note {
   int x, y, scaleIndex;
   boolean played;
-  Ani growAni, shrinkAni;
+  Ani growAni, shrinkAni, fadeInAni, fadeOutAni;
   PApplet parent;
   Stave stave;
   Playhead playhead;
   
   float diameter = 30;
   float startDiameter = 0;
+  float drawOpacity = 255;
   float radius = diameter / 2;
   
   Note(int xPos, int yPos, Stave s, Playhead pl, PApplet p) {
@@ -20,6 +21,9 @@ class Note {
     
     growAni = new Ani(this, 0.1, "startDiameter", diameter, Ani.LINEAR);
     shrinkAni = new Ani(this, 0.1, "startDiameter", 0.0, Ani.LINEAR, "onEnd:remove");  
+
+    fadeInAni = new Ani(this, 0.3, "drawOpacity", 128, Ani.LINEAR);
+    fadeOutAni = new Ani(this, 0.3, "drawOpacity", 255, Ani.LINEAR);
     
     growAni.start();
   }
@@ -39,7 +43,7 @@ class Note {
     fill(c); 
 
     int absX = x + stave.xPadding;
-    int absY = y + stave.yPadding;
+    int absY = y + stave.topPadding;
     
     ellipse(absX, absY,startDiameter,startDiameter);
   }
@@ -55,6 +59,16 @@ class Note {
   void destroy() {
     shrinkAni.setBegin();
     shrinkAni.start();
+  }
+
+  void fadeOut() {
+    fadeOutAni.setBegin();
+    fadeOutAni.start();
+  }
+
+  void fadeIn() {
+    fadeInAni.setBegin();
+    fadeInAni.start();
   }
   
   void remove() {
@@ -84,13 +98,13 @@ class Note {
   private color colorFromColorIndex(int i) {
     color[] colors = new color[0];
 
-    colors = append(colors, color(245, 120, 107));
-    colors = append(colors, color(255, 206, 42));
-    colors = append(colors, color(254, 178, 196));
-    colors = append(colors, color(200, 214, 87));
-    colors = append(colors, color(176, 60, 164));
-    colors = append(colors, color(255, 179, 38));
-    colors = append(colors, color(126, 212, 210));
+    colors = append(colors, color(245, 120, 107, drawOpacity));
+    colors = append(colors, color(255, 206, 42, drawOpacity));
+    colors = append(colors, color(254, 178, 196,drawOpacity));
+    colors = append(colors, color(200, 214, 87,drawOpacity));
+    colors = append(colors, color(176, 60, 164,drawOpacity));
+    colors = append(colors, color(255, 179, 38,drawOpacity));
+    colors = append(colors, color(126, 212, 210,drawOpacity));
 
     return colors[i];
   }
