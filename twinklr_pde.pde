@@ -5,7 +5,6 @@ import controlP5.*;
 Stave stave;
 Playhead playhead;
 Soundbox soundbox;
-ControlP5 cp5;
 
 void setup() {
   size(800, 480);
