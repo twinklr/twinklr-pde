@@ -11,6 +11,9 @@ void setupGui() {
 void mouseDragged() {
   if(stave.alteringLength) {
     stave.updateWidthFromAbs(mouseX);
+    if(playhead.position > stave.staveWidth) {
+      playhead.position = stave.staveWidth;
+    }
   }
 }
 
@@ -65,8 +68,8 @@ void createLengthGroup() {
                    .setCaptionLabel("Change Sequence Length")
                    .disableCollapse()
                    .setWidth(200)
-                   .setBackgroundHeight(300)
-                   .setBackgroundColor(color(0,140))
+                   .setBackgroundHeight(150)
+                   .setBackgroundColor(color(0,128))
                    .hide()
                    ;
 

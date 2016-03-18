@@ -40,7 +40,7 @@ class Playhead {
     }
     if(position < 0) {
       position = stave.staveWidth + position;
-      
+      stave.resetNotes();
     }
   }
 }

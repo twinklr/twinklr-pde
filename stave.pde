@@ -50,6 +50,13 @@ class Stave {
       int y2 = topPadding + (i* lineHeight);
       line(x1, y1, x2, y2);
     }
+
+    // draw end
+    if(alteringLength) {
+      noStroke();
+      fill(244,144,24);
+      rect(staveWidth+xPadding, topPadding, 5, staveHeight);      
+    }
   }
 
   void drawNotes() {
@@ -131,7 +138,7 @@ class Stave {
       canEdit = true;
       alteringLength = false;
 
-            removeNotesOutsideWidth();
+      removeNotesOutsideWidth();
 
       fadeInNotes();
     } else {
