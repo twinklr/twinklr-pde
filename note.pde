@@ -22,8 +22,8 @@ class Note {
     growAni = new Ani(this, 0.1, "startDiameter", diameter, Ani.LINEAR);
     shrinkAni = new Ani(this, 0.1, "startDiameter", 0.0, Ani.LINEAR, "onEnd:remove");  
 
-    fadeInAni = new Ani(this, 0.3, "drawOpacity", 128, Ani.LINEAR);
-    fadeOutAni = new Ani(this, 0.3, "drawOpacity", 255, Ani.LINEAR);
+    fadeOutAni = new Ani(this, 0.3, "drawOpacity", 128, Ani.LINEAR);
+    fadeInAni = new Ani(this, 0.3, "drawOpacity", 255, Ani.LINEAR);
     
     growAni.start();
   }
@@ -34,13 +34,14 @@ class Note {
 
     color c = colorFromColorIndex(i);
 
+    fill(c); 
+
     if(intersectedBy(playhead.position)) {
       strokeWeight(3);
       stroke(128,0,0);
     } else {
       noStroke();
     }
-    fill(c); 
 
     int absX = x + stave.xPadding;
     int absY = y + stave.topPadding;

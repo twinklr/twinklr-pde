@@ -1,5 +1,6 @@
 class Stave {
   int noteCount, staveWidth, staveHeight, xPadding, topPadding, bottomPadding, lineHeight, lineCount;
+  boolean canEdit, alteringLength;
   Soundbox soundBox;
   PApplet parent;
   ArrayList<Note> notes;
@@ -9,17 +10,21 @@ class Stave {
     this.noteCount = nc;
     this.soundBox = s;
     this.notes = new ArrayList<Note>();
-    
+
     xPadding = 50;
     topPadding = 30;
     bottomPadding = 70;
 
-    staveWidth = 0;
+    staveWidth = width - (xPadding*2);
     staveHeight = 0;
+
+    canEdit = true;
+    alteringLength = false;
   }
 
   void render() {
-    staveWidth = width - (xPadding*2);
+    // staveWidth is set on creation, and updated via a function
+    // by contrast, staveHeight is consistent.
     staveHeight = height - (topPadding+bottomPadding);
 
     lineCount = noteCount - 1;
@@ -55,6 +60,10 @@ class Stave {
   }
 
   void click(int x, int y) {
+    if(!canEdit) {
+      return;
+    }
+
     boolean add = true;
     // first, for each note, is it inside?
 
@@ -103,6 +112,57 @@ class Stave {
     if(y < topPadding-finger) { return false; }
     if(y > (topPadding+staveHeight+finger)) { return false; }
     return true;
+  }
 
+  void fadeOutNotes() {
+    for (Note note : stave.notes) {
+      note.fadeOut();
+    }
+  }
+
+  void fadeInNotes() {
+    for (Note note : stave.notes) {
+      note.fadeIn();
+    }
+  }
+
+  void toggleAlterLength() {
+    if(alteringLength) {
+      canEdit = true;
+      alteringLength = false;
+
+            removeNotesOutsideWidth();
+
+      fadeInNotes();
+    } else {
+      canEdit = false;
+      alteringLength = true;
+
+
+      
+      fadeOutNotes();
+    }
+  }
+
+  void updateWidthFromAbs(int x) {
+    int minWidth = 250;
+    int maxWidth = width - (xPadding*2);
+
+    int relX = x - xPadding;
+    if(x < (minWidth+xPadding)) {
+      staveWidth = minWidth;
+    } else if(x > (maxWidth+xPadding)) {
+      staveWidth = maxWidth;
+    } else {
+      staveWidth = relX;
+    }
+  }
+
+  void removeNotesOutsideWidth() {
+    for (Note note : stave.notes) {
+      if(note.x > staveWidth) {
+        note.destroy();
+      }
+    }
   }
 }
