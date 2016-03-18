@@ -3,6 +3,10 @@ int rotaryB = 0;
 int newState = 0;
 int lastState = 0;
 
+int pinA = 17;
+int pinb = 27;
+
+
 // watch pins
 
 void updatePinA(int pin) {
@@ -35,7 +39,6 @@ void updatePosition() {
   // 3 = one step counter clockwise
   switch(delta) {
     case 1:
-      setXTo(xCoord+1);
       playhead.modifyPositionBy(1);
       //console.log(count);
       break;
