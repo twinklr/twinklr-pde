@@ -1,0 +1,50 @@
+int rotaryA = 0;
+int rotaryB = 0;
+int newState = 0;
+int lastState = 0;
+
+// watch pins
+
+void updatePinA(pin) {
+  rotaryA = GPIO.digitalRead(pinA); 
+  updatePosition();
+}
+
+void updatePinB(pin) {
+  rotaryB = GPIO.digitalRead(pinB); 
+  updatePosition();
+}
+
+// update position based on pins
+
+void updatePosition() {
+  int xorVal = rotary A ^ rotaryB;
+  
+  // Get the new rotary encoder state
+  int newState = (rotaryA * 4) + (rotaryB * 2) + (xorVal * 1);
+  
+  // Get the delta (difference) between the previous state and the new state
+  int delta = (newState - lastState) % 4;
+  // Store the state for next time around
+  lastState = newState;
+
+  //delta:
+  // 0 = no change
+  // 1 = one step clockwise
+  // 2 = two steps in either direction
+  // 3 = one step counter clockwise
+  switch(delta) {
+    case 1:
+      setXTo(xCoord+1);
+      playhead.modifyPositionBy(1);
+      //console.log(count);
+      break;
+    case 3:
+      playhead.modifyPositionBy(-1);
+      //console.log(count);
+      break;
+    case 2:
+      //console.log('-');
+      break;
+  }
+}
