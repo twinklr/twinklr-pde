@@ -5,12 +5,12 @@ int lastState = 0;
 
 // watch pins
 
-void updatePinA(pin) {
+void updatePinA(int pin) {
   rotaryA = GPIO.digitalRead(pinA); 
   updatePosition();
 }
 
-void updatePinB(pin) {
+void updatePinB(int pin) {
   rotaryB = GPIO.digitalRead(pinB); 
   updatePosition();
 }
@@ -18,7 +18,7 @@ void updatePinB(pin) {
 // update position based on pins
 
 void updatePosition() {
-  int xorVal = rotary A ^ rotaryB;
+  int xorVal = rotaryA ^ rotaryB;
   
   // Get the new rotary encoder state
   int newState = (rotaryA * 4) + (rotaryB * 2) + (xorVal * 1);
