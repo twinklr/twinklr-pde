@@ -1,6 +1,6 @@
 void setupGui() {
   cp5 = new ControlP5(this);
-  cp5.addButton("length")
+  Button lengthButton = cp5.addButton("lengthButton")
    .setBroadcast(false)
    .setValue(1)
    .setPosition(0,440)
@@ -8,7 +8,9 @@ void setupGui() {
    .setBroadcast(true)
    ;
 
-  cp5.addButton("scales")
+  lengthButton.setCaptionLabel("Length");
+
+  Button scalesButton = cp5.addButton("scalesButton")
    .setBroadcast(false)
    .setValue(2)
    .setPosition(200,440)
@@ -16,7 +18,9 @@ void setupGui() {
    .setBroadcast(true)
    ;
 
-  cp5.addButton("midi")
+  scalesButton.setCaptionLabel("Scales");
+
+  Button midiButton = cp5.addButton("midiButton")
    .setBroadcast(false)
    .setValue(3)
    .setPosition(400,440)
@@ -24,13 +28,17 @@ void setupGui() {
    .setBroadcast(true)
   ;
 
-  cp5.addButton("preferences")
+  midiButton.setCaptionLabel("MIDI");
+
+  Button preferencesButton = cp5.addButton("preferencesButton")
    .setBroadcast(false)
    .setValue(4)
    .setPosition(600,440)
    .setSize(200,40)
    .setBroadcast(true)
   ;
+
+  preferencesButton.setCaptionLabel("Preferences");
 }
 
 void mouseDragged() {
@@ -63,15 +71,11 @@ void keyPressed() {
       println(soundbox.scaleRoot);
       break;
     case 'l':
-      stave.toggleAlterLength();
+      
       break;
   }
 }
 
-public void controlEvent(ControlEvent theEvent) {
-  println(theEvent.getController().getName());
-}
-
-public void scales(int theValue) {
-  println("a button event from scales: "+theValue);
+public void lengthButton(int theValue) {
+  stave.toggleAlterLength();
 }
