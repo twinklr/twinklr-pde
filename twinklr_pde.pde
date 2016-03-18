@@ -1,5 +1,4 @@
 import de.looksgood.ani.*;
-import processing.sound.*;
 import controlP5.*;
 // import processing.io.*;
 
