@@ -38,6 +38,7 @@ public void lengthButton(int theValue) {
     lengthGroup.hide();
     stave.stopAlteringLength();
   } else {
+    scalesGroup.hide();
     lengthGroup.show();
     stave.startAlteringLength();
   }
@@ -48,6 +49,9 @@ public void scalesButton(int theValue) {
     scalesGroup.hide();
     stave.canEdit = true;
   } else {
+    lengthGroup.hide();
+    stave.stopAlteringLength();
+    
     scalesGroup.show();
     stave.canEdit = false;
   }
