@@ -1,11 +1,13 @@
 ControlP5 cp5;
 ControllerGroup lengthGroup;
+ControllerGroup scalesGroup;
 
 void setupGui() {
   cp5 = new ControlP5(this);
 
   createBottomButtons();
   createLengthGroup();
+  createScalesGroup();
 }
 
 void mouseDragged() {
@@ -85,6 +87,80 @@ void createLengthGroup() {
      .setPosition(10,100)
      .setSize(180,40)
      .setGroup(lengthGroup)
+     .setCaptionLabel("Done!")
+     .setBroadcast(true)
+     ;
+}
+
+void createScalesGroup() {
+  scalesGroup = cp5.addGroup("scalesGroup")
+                   .setPosition(100,100)
+                   .hideArrow()
+                   .setCaptionLabel("Change Scale and Root")
+                   .disableCollapse()
+                   .setWidth(600)
+                   .setBackgroundHeight(300)
+                   .setBackgroundColor(color(0,128))
+                   // .hide()
+                   ;
+
+  String[] bottomScaleButtons = {"C", "D", "E", "F", "G", "A", "B"};
+
+  for (int i = 0; i < bottomScaleButtons.length; i++) {
+    String buttonName = "scale" + bottomScaleButtons[i] + "But";
+    cp5.addButton(buttonName).setBroadcast(false)
+     .setPosition((85 + (i*60)),100)
+     .setSize(50,50)
+     .setGroup(scalesGroup)
+     .setCaptionLabel(bottomScaleButtons[i])
+     .setBroadcast(true)
+    ;
+  }
+
+  String[] topScaleButtons = {"C#", "Eb", "F#", "Ab", "Bb"};
+
+  for (int i = 0; i < topScaleButtons.length; i++) {
+    int skew = 0;
+    if( i > 1) {
+      skew = 65;
+    }
+    String functionSafeName = topScaleButtons[i].replace("#", "sharp").replace("b", "flat");
+    String buttonName = "scale" + functionSafeName + "But";
+    Button but = cp5.addButton(buttonName).setBroadcast(false)
+     .setPosition((115 + (i*60) + skew),40)
+     .setSize(50,50)
+     .setGroup(scalesGroup)
+     .setCaptionLabel(topScaleButtons[i])
+     .setBroadcast(true)
+    ;
+
+    but.getCaptionLabel().toUpperCase(false);
+  }
+
+  String[] scaleTypes = { "major", "minor", "dorian", "lydian", "mixolydian", "phrygian", "locrian", "pentatonic", "blues"};
+
+  for (int i = 0; i < scaleTypes.length; i++) {
+    String buttonName = "scaleType" + scaleTypes[i] + "But";
+    cp5.addButton(buttonName).setBroadcast(false)
+     .setPosition((30 + (i*60)),170)
+     .setSize(50,50)
+     .setGroup(scalesGroup)
+     .setCaptionLabel(scaleTypes[i])
+     .setBroadcast(true)
+    ;
+  }
+
+  // cp5.addTextlabel("label")
+  //    .setText("Drag the orange marker to create a loop.")
+  //    .setPosition(10,20)
+  //    .setWidth(40)
+  //    .setGroup(scalesGroup);
+  //    ;
+
+  cp5.addButton("doneAlteringScalesBut").setBroadcast(false)
+     .setPosition(210,250)
+     .setSize(180,40)
+     .setGroup(scalesGroup)
      .setCaptionLabel("Done!")
      .setBroadcast(true)
      ;
