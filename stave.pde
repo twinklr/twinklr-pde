@@ -144,11 +144,20 @@ class Stave {
     } else {
       canEdit = false;
       alteringLength = true;
-
-
       
       fadeOutNotes();
     }
+  }
+
+  void stopAlteringLength() {
+    alteringLength = false;
+    removeNotesOutsideWidth();
+    fadeInNotes();
+  }
+
+  void startAlteringLength() {
+    alteringLength = true;
+    fadeOutNotes();
   }
 
   void updateWidthFromAbs(int x) {

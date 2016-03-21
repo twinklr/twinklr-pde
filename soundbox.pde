@@ -110,6 +110,21 @@ class Soundbox {
     loadScaleSounds(scaleType, scaleRoot);
   }
 
+  String normalizeScaleName(String input) {
+    String norm = input.toLowerCase();
+    switch(norm) {
+      case "eb": 
+        return "d#";
+      case "ab":
+        return "g#";
+      case "bb":
+        return "a#";
+      default:
+        return norm;
+    }
+
+  }
+
   void cycleRoot() {
     String curRoot = scaleRoot;
     String[] notes = {"c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b"};
@@ -124,6 +139,10 @@ class Soundbox {
       } 
     }
     loadScaleSounds(scaleType, scaleRoot);
+  }
+
+  void updateScaleSounds() {
+    loadScaleSounds(scaleType, scaleRoot); 
   }
 
   private void setupAllSounds() {
