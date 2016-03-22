@@ -23,7 +23,7 @@ void setup() {
   setupGui();
 
   // GPIO.pinMode(pinA, GPIO.INPUT);
-  // GPIO.attachInterrupt(pinB, this, "updatePinA", GPIO.CHANGE);
+  // GPIO.attachInterrupt(pinA, this, "updatePinA", GPIO.CHANGE);
   
   // GPIO.pinMode(pinB, GPIO.INPUT);
   // GPIO.attachInterrupt(pinB, this, "updatePinB", GPIO.CHANGE);
