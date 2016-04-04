@@ -261,11 +261,6 @@ void createSaveLoadGroup() {
     ;
 
     but.getCaptionLabel().setSize(12);
-
-    // TODO: adapt this to highlight already saved scales
-    // if(normalizedScaleName.equals(soundbox.scaleRoot)) {
-    //   but.setColorBackground(highlightColor);
-    // }
   }
 
   // create LOAD header
@@ -295,9 +290,10 @@ void createSaveLoadGroup() {
     but.getCaptionLabel().setSize(12);
 
     // TODO: adapt this to highlight already saved scales
-    // if(normalizedScaleName.equals(soundbox.scaleRoot)) {
-    //   but.setColorBackground(highlightColor);
-    // }
+    File f = new File(dataPath(str(i+1) + ".xml"));
+    if (f.exists()) {
+      but.setColorBackground(highlightColor);
+    } 
   }
 
   // button to close without loading
@@ -377,52 +373,67 @@ void controlEvent(ControlEvent theEvent) {
       selectScaleTypeButton(name);
       break;
     case "save1But":
-      store = new Storage(stave,soundbox);
-      tuneXml = store.tuneToXml();
-      saveXML(tuneXml, "data/1.xml");
+      saveTune("data/1.xml");
       break;
     case "save2But":
-      store = new Storage(stave,soundbox);
-      tuneXml = store.tuneToXml();
-      saveXML(tuneXml, "data/2.xml");
+      saveTune("data/2.xml");
       break;
     case "save3But":
-      store = new Storage(stave,soundbox);
-      tuneXml = store.tuneToXml();
-      saveXML(tuneXml, "data/3.xml");
+      saveTune("data/3.xml");
       break;
     case "save4But":
-      store = new Storage(stave,soundbox);
-      tuneXml = store.tuneToXml();
-      saveXML(tuneXml, "data/4.xml");
+      saveTune("data/4.xml");
       break;
     case "save5But":
-      store = new Storage(stave,soundbox);
-      tuneXml = store.tuneToXml();
-      saveXML(tuneXml, "data/5.xml");
+      saveTune("data/5.xml");
       break;
     case "save6But":
-      store = new Storage(stave,soundbox);
-      tuneXml = store.tuneToXml();
-      saveXML(tuneXml, "data/6.xml");
+      saveTune("data/6.xml");
       break;
     case "save7But":
-      store = new Storage(stave,soundbox);
-      tuneXml = store.tuneToXml();
-      saveXML(tuneXml, "data/7.xml");
+      saveTune("data/7.xml");
       break;
     case "save8But":
-      store = new Storage(stave,soundbox);
-      tuneXml = store.tuneToXml();
-      saveXML(tuneXml, "data/8.xml");
+      saveTune("data/8.xml");
       break;
 
     case "load1But":
-      store = new Storage(stave,soundbox);
-      tuneXml = loadXML("data/1.xml");
-      store.xmlToTune(tuneXml);
+      loadTune("data/1.xml");
+      break;
+    case "load2But":
+      loadTune("data/2.xml");
+      break;
+    case "load3But":
+      loadTune("data/3.xml");
+      break;
+    case "load4But":
+      loadTune("data/4.xml");
+      break;
+    case "load5But":
+      loadTune("data/5.xml");
+      break;
+    case "load6But":
+      loadTune("data/6.xml");
+      break;
+    case "load7But":
+      loadTune("data/7.xml");
+      break;
+    case "load8But":
+      loadTune("data/8.xml");
       break;
   }
+}
+
+void saveTune(String filename) {
+  store = new Storage(stave,soundbox);
+  tuneXml = store.tuneToXml();
+  saveXML(tuneXml, filename);
+}
+
+void loadTune(String filename) {
+  store = new Storage(stave,soundbox);
+  tuneXml = loadXML(filename);
+  store.xmlToTune(tuneXml);
 }
 
 void deselectAllScaleButtons() {

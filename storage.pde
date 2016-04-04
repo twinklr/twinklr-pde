@@ -27,8 +27,6 @@ class Storage {
   }
 
   void xmlToTune(XML tuneXml) {
-    print(tuneXml.toString());
-
     soundbox.scaleType = tuneXml.getString("scaletype");
     soundbox.scaleRoot = tuneXml.getString("scaleroot");
 
