@@ -27,8 +27,23 @@ class PlayheadManager {
     for (Playhead p : playheads) {
       if(p.active) {
         p.render();
+        p.renderIntersections();
       }
     }
+  }
+
+  void playNotes() {
+    // if(intersectedBy(playhead.position) && !played) {
+    //   // println(stave.indexOfNote(this));
+    //   stave.soundBox.playSound(stave.indexOfNote(this));
+    //   played = true;
+    // }
+
+    // TODO
+    // if(intersectedBy(playhead.position)) {
+    //   strokeWeight(3);
+    //   stroke(128,0,0);
+    // } else {
   }
 
   void modifyPositionBy(float amt) {

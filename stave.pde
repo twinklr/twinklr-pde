@@ -62,7 +62,6 @@ class Stave {
   void drawNotes() {
     for (Note note : notes) {
       note.draw();
-      note.play();
     }
   }
 
@@ -86,8 +85,8 @@ class Stave {
      }
 
     if(add) {
-      Note n = new Note(localX, localY, this, playhead, parent);
-    
+      Note n = new Note(localX, localY, this, parent);
+      
       notes.add(n);
     }
   }
@@ -96,12 +95,6 @@ class Stave {
     int lineIndex = (int) Math.floor((n.y + (lineHeight/2)) / lineHeight);
     // this is index from top downwards. so we have to flip it, because music goes bottom-to-top:
     return lineCount - lineIndex;
-  }
-
-  void resetNotes() {
-    for (Note note : notes) {
-      note.played = false;
-    }
   }
 
   void removeAll() {

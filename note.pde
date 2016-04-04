@@ -1,23 +1,19 @@
 class Note {
   int x, y;
-  boolean played;
   Ani growAni, shrinkAni, fadeInAni, fadeOutAni;
   PApplet parent;
   Stave stave;
-  Playhead playhead;
   
   float diameter = 30;
   float startDiameter = 0;
   float drawOpacity = 255;
   float radius = diameter / 2;
   
-  Note(int xPos, int yPos, Stave s, Playhead pl, PApplet p) {
+  Note(int xPos, int yPos, Stave s, PApplet p) {
     x = xPos;
     y = yPos;
     this.stave = s;
-    this.playhead = pl;
     this.parent = p;
-    played = false;
     
     growAni = new Ani(this, 0.1, "startDiameter", diameter, Ani.LINEAR);
     shrinkAni = new Ani(this, 0.1, "startDiameter", 0.0, Ani.LINEAR, "onEnd:remove");  
@@ -35,26 +31,12 @@ class Note {
     color c = colorFromColorIndex(i);
 
     fill(c); 
-
-    if(intersectedBy(playhead.position)) {
-      strokeWeight(3);
-      stroke(128,0,0);
-    } else {
-      noStroke();
-    }
+    noStroke();
 
     int absX = x + stave.xPadding;
     int absY = y + stave.topPadding;
     
     ellipse(absX, absY,startDiameter,startDiameter);
-  }
-  
-  void play() {
-    if(intersectedBy(playhead.position) && !played) {
-      // println(stave.indexOfNote(this));
-      stave.soundBox.playSound(stave.indexOfNote(this));
-      played = true;
-    }
   }
   
   void destroy() {

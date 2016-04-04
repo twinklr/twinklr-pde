@@ -39,12 +39,10 @@ class Storage {
     XML[] childNotes = tuneXml.getChildren("note");
 
     for (int i = 0; i < childNotes.length; i ++ ) {
-      // TODO playhead should not be here. it should be on stave.
-
       int x = childNotes[i].getInt("x");
       int y = childNotes[i].getInt("y");
 
-      Note n = new Note(x, y, stave, playhead, stave.parent);
+      Note n = new Note(x, y, stave, stave.parent);
     
       stave.notes.add(n);      
     }

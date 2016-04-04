@@ -34,5 +34,6 @@ void draw() {
   background(255);
   stave.render();
   playheadManager.render();
-  // stave.drawNotes();
+  stave.drawNotes();
+  playheadManager.playNotes();
 }

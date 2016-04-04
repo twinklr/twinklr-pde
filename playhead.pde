@@ -36,26 +36,39 @@ class Playhead {
     line(x,0,x,height);
   }
 
+  void renderIntersections() {
+    for (Note n : stave.notes) {
+      if(n.intersectedBy(position)) {
+        noStroke();
+        fill(col);
+        int absX = n.x + stave.xPadding;
+        int absY = n.y + stave.topPadding;
+        float dia = n.diameter + 8;
+        ellipse(absX, absY,dia,dia);
+      }
+    }
+  }
+
   void modifyPositionBy(float amt) {
     position += (amt * directionOffset * speed);
 
     // notify stave if we've changed direction
     if((direction == 1) && (amt < 0)) {
       direction = 1 - direction;
-      stave.resetNotes();
+      // stave.resetNotes();
     }
     if((direction == 0) && (amt > 0)) {
       direction = 1 - direction;
-      stave.resetNotes();
+      // stave.resetNotes();
     }
 
     if(position > stave.staveWidth) {
       position = position % stave.staveWidth;
-      stave.resetNotes();
+      // stave.resetNotes();
     }
     if(position < 0) {
       position = stave.staveWidth + position;
-      stave.resetNotes();
+      // stave.resetNotes();
     }
   }
 }
