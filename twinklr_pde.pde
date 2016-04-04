@@ -3,6 +3,7 @@ import controlP5.*;
 // import processing.io.*;
 
 Stave stave;
+PlayheadManager playheadManager;
 Playhead playhead;
 Soundbox soundbox;
 
@@ -18,7 +19,7 @@ void setup() {
 
   soundbox = new Soundbox(noteCount, this);
   stave = new Stave(noteCount, soundbox, this);
-  playhead = new Playhead(stave, this, color(128,0,0), true);
+  playheadManager = new PlayheadManager(stave, this);
 
   setupGui();
 
@@ -32,6 +33,6 @@ void setup() {
 void draw() {
   background(255);
   stave.render();
-  playhead.render();
-  stave.drawNotes();
+  playheadManager.render();
+  // stave.drawNotes();
 }

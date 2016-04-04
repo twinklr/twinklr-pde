@@ -39,7 +39,8 @@ void mousePressed() {
 
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
-  playhead.modifyPositionBy(e);
+
+  playheadManager.modifyPositionBy(e);
 }
 
 public void lengthButton(int theValue) {

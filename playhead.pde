@@ -23,6 +23,10 @@ class Playhead {
     col = c;
   }
 
+  void changeOffset(int offset) {
+    position += offset;
+  }
+
   void render() {
     strokeWeight(2);
     stroke(col);
