@@ -526,11 +526,11 @@ void selectScaleTypeButton(String scaleTypeButtonName) {
 }
 
 void createBottomButtons() {
-   Button lengthButton = cp5.addButton("lengthButton")
+  Button lengthButton = cp5.addButton("lengthButton")
                             .setBroadcast(false)
                             .setValue(1)
                             .setPosition(0,440)
-                            .setSize(199,40)
+                            .setSize(159,40)
                             .setBroadcast(true)
                             ;
 
@@ -539,30 +539,40 @@ void createBottomButtons() {
   Button scalesButton = cp5.addButton("scalesButton")
                            .setBroadcast(false)
                            .setValue(2)
-                           .setPosition(200,440)
-                           .setSize(199,40)
+                           .setPosition(160,440)
+                           .setSize(159,40)
                            .setBroadcast(true)
                            ;
 
   scalesButton.setCaptionLabel("Scales");
 
+  Button playheadsButton = cp5.addButton("playheadsButton")
+                           .setBroadcast(false)
+                           .setValue(3)
+                           .setPosition(320,440)
+                           .setSize(159,40)
+                           .setBroadcast(true)
+                           ;
+
+  playheadsButton.setCaptionLabel("Playheads");
+
   Button midiButton = cp5.addButton("midiButton")
                          .setBroadcast(false)
-                         .setValue(3)
-                         .setPosition(400,440)
-                         .setSize(199,40)
+                         .setValue(4)
+                         .setPosition(480,440)
+                         .setSize(159,40)
                          .setBroadcast(true)
                         ;
 
   midiButton.setCaptionLabel("MIDI");
 
   Button saveLoadButton = cp5.addButton("saveLoadButton")
-                                .setBroadcast(false)
-                                .setValue(4)
-                                .setPosition(600,440)
-                                .setSize(200,40)
-                                .setBroadcast(true)
-                                ;
+                             .setBroadcast(false)
+                             .setValue(5)
+                             .setPosition(640,440)
+                             .setSize(160,40)
+                             .setBroadcast(true)
+                             ;
 
   saveLoadButton.setCaptionLabel("Save / Load");
 }
