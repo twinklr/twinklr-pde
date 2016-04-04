@@ -15,7 +15,9 @@ void setupGui() {
   createBottomButtons();
   createLengthGroup();
   createScalesGroup();
+
   createSaveLoadGroup();
+  updateSaveLoadGroup();
 }
 
 void mouseDragged() {
@@ -73,6 +75,7 @@ public void saveLoadButton(int theValue) {
     scalesGroup.hide();
     stave.stopAlteringLength();
     
+    updateSaveLoadGroup();
     saveLoadGroup.show();
     stave.canEdit = false;
   }
@@ -288,12 +291,6 @@ void createSaveLoadGroup() {
     ;
 
     but.getCaptionLabel().setSize(12);
-
-    // TODO: adapt this to highlight already saved scales
-    File f = new File(dataPath(str(i+1) + ".xml"));
-    if (f.exists()) {
-      but.setColorBackground(highlightColor);
-    } 
   }
 
   // button to close without loading
@@ -304,6 +301,19 @@ void createSaveLoadGroup() {
      .setCaptionLabel("Close")
      .setBroadcast(true)
      ;
+}
+
+void updateSaveLoadGroup() {
+  for (int i = 0; i < 8; i++) {
+    File f = new File(dataPath(str(i+1) + ".xml"));
+    String buttonName = "load" + (i+1) + "But";
+
+    if (f.exists()) {
+      cp5.getController(buttonName).setColorBackground(highlightColor);
+    } else {
+      cp5.getController(buttonName).setColorBackground(defaultBgColor);
+    }
+  } 
 }
 
 void controlEvent(ControlEvent theEvent) {
@@ -428,6 +438,7 @@ void saveTune(String filename) {
   store = new Storage(stave,soundbox);
   tuneXml = store.tuneToXml();
   saveXML(tuneXml, filename);
+  updateSaveLoadGroup();
 }
 
 void loadTune(String filename) {
