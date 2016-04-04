@@ -62,6 +62,8 @@ public void scalesButton(int theValue) {
   } else {
     lengthGroup.hide();
     stave.stopAlteringLength();
+
+    saveLoadGroup.hide();
     
     updateScalesGroup();
     scalesGroup.show();
