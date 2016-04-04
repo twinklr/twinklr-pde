@@ -14,7 +14,9 @@ void setupGui() {
 
   createBottomButtons();
   createLengthGroup();
+
   createScalesGroup();
+  updateScalesGroup();
 
   createSaveLoadGroup();
   updateSaveLoadGroup();
@@ -61,6 +63,7 @@ public void scalesButton(int theValue) {
     lengthGroup.hide();
     stave.stopAlteringLength();
     
+    updateScalesGroup();
     scalesGroup.show();
     stave.canEdit = false;
   }
@@ -154,11 +157,6 @@ void createScalesGroup() {
      .setCaptionLabel(bottomScaleButtons[i])
      .setBroadcast(true)
     ;
-
-    String normalizedScaleName = soundbox.normalizeScaleName(bottomScaleButtons[i]);
-    if(normalizedScaleName.equals(soundbox.scaleRoot)) {
-      but.setColorBackground(highlightColor);
-    }
   }
 
   String[] topScaleButtons = {"C#", "Eb", "F#", "Ab", "Bb"};
@@ -179,11 +177,6 @@ void createScalesGroup() {
     ;
 
     but.getCaptionLabel().toUpperCase(false);
-
-    String normalizedScaleName = soundbox.normalizeScaleName(topScaleButtons[i]);
-    if(normalizedScaleName.equals(soundbox.scaleRoot)) {
-      but.setColorBackground(highlightColor);
-    }
   }
 
   String[] scaleTypes = { "major", "minor", "dorian", "lydian", "mixolydian", "phrygian", "locrian", "pentatonic", "blues"};
@@ -197,10 +190,6 @@ void createScalesGroup() {
      .setCaptionLabel(scaleTypes[i])
      .setBroadcast(true)
     ;
-
-    if(scaleTypes[i] == soundbox.scaleType) {
-      but.setColorBackground(highlightColor);
-    }
   }
 
   // cp5.addTextlabel("label")
@@ -301,6 +290,32 @@ void createSaveLoadGroup() {
      .setCaptionLabel("Close")
      .setBroadcast(true)
      ;
+}
+
+void updateScalesGroup() {
+  String[] scaleButtons = {"C", "D", "E", "F", "G", "A", "B", "C#", "Eb", "F#", "Ab", "Bb"};
+  for (int i = 0; i < scaleButtons.length; i++) {
+    String functionSafeName = scaleButtons[i].replace("#", "sharp").replace("b", "flat");
+    String buttonName = "scale" + functionSafeName + "But";
+
+    String normalizedScaleName = soundbox.normalizeScaleName(scaleButtons[i]);
+    if(normalizedScaleName.equals(soundbox.scaleRoot)) {
+      cp5.getController(buttonName).setColorBackground(highlightColor);
+    } else {
+      cp5.getController(buttonName).setColorBackground(defaultBgColor);
+    }
+  }
+
+  String[] scaleTypes = { "major", "minor", "dorian", "lydian", "mixolydian", "phrygian", "locrian", "pentatonic", "blues"};
+
+  for (int i = 0; i < scaleTypes.length; i++) {
+    String buttonName = "scaleType" + scaleTypes[i] + "But";
+    if(scaleTypes[i].equals(soundbox.scaleType)) {
+      cp5.getController(buttonName).setColorBackground(highlightColor);
+    } else {
+      cp5.getController(buttonName).setColorBackground(defaultBgColor); 
+    }
+  }
 }
 
 void updateSaveLoadGroup() {
@@ -445,6 +460,7 @@ void loadTune(String filename) {
   store = new Storage(stave,soundbox);
   tuneXml = loadXML(filename);
   store.xmlToTune(tuneXml);
+  updateScalesGroup();
 }
 
 void deselectAllScaleButtons() {
@@ -478,6 +494,7 @@ void selectScaleButton(String scaleButtonName) {
   String shortName = scaleButtonName.replace("scale", "").replace("But", "").replace("sharp", "#").replace("flat", "b");
   String scaleRoot = soundbox.normalizeScaleName(shortName);
   soundbox.scaleRoot = scaleRoot;
+  updateScalesGroup();
 }
 
 void selectScaleTypeButton(String scaleTypeButtonName) {
@@ -490,6 +507,7 @@ void selectScaleTypeButton(String scaleTypeButtonName) {
   String scaleType = scaleTypeButtonName.replace("scaleType", "").replace("But", "");
 
   soundbox.scaleType = scaleType;
+  updateScalesGroup();
 }
 
 void createBottomButtons() {
