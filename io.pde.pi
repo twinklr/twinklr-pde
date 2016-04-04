@@ -4,7 +4,7 @@ int newState = 0;
 int lastState = 0;
 
 int pinA = 17;
-int pinb = 27;
+int pinB = 27;
 
 
 // watch pins
