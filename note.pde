@@ -1,5 +1,5 @@
 class Note {
-  int x, y, scaleIndex;
+  int x, y;
   boolean played;
   Ani growAni, shrinkAni, fadeInAni, fadeOutAni;
   PApplet parent;

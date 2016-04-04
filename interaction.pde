@@ -373,6 +373,46 @@ void controlEvent(ControlEvent theEvent) {
     case "scaleTypebluesBut":
       selectScaleTypeButton(name);
       break;
+    case "save1But":
+      Storage store = new Storage(stave,soundbox);
+      XML tuneXml= store.tuneToXml();
+      saveXML(tuneXml, "data/1.xml");
+      break;
+    case "save2But":
+      Storage store = new Storage(stave,soundbox);
+      XML tuneXml= store.tuneToXml();
+      saveXML(tuneXml, "data/2.xml");
+      break;
+    case "save3But":
+      Storage store = new Storage(stave,soundbox);
+      XML tuneXml= store.tuneToXml();
+      saveXML(tuneXml, "data/3.xml");
+      break;
+    case "save4But":
+      Storage store = new Storage(stave,soundbox);
+      XML tuneXml= store.tuneToXml();
+      saveXML(tuneXml, "data/4.xml");
+      break;
+    case "save5But":
+      Storage store = new Storage(stave,soundbox);
+      XML tuneXml= store.tuneToXml();
+      saveXML(tuneXml, "data/5.xml");
+      break;
+    case "save6But":
+      Storage store = new Storage(stave,soundbox);
+      XML tuneXml= store.tuneToXml();
+      saveXML(tuneXml, "data/6.xml");
+      break;
+    case "save7But":
+      Storage store = new Storage(stave,soundbox);
+      XML tuneXml= store.tuneToXml();
+      saveXML(tuneXml, "data/7.xml");
+      break;
+    case "save8But":
+      Storage store = new Storage(stave,soundbox);
+      XML tuneXml= store.tuneToXml();
+      saveXML(tuneXml, "data/8.xml");
+      break;
   }
 }
 
