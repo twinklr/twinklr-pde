@@ -1,6 +1,7 @@
 ControlP5 cp5;
 ControllerGroup lengthGroup;
 ControllerGroup scalesGroup;
+ControllerGroup saveLoadGroup;
 
 int defaultBgColor = color(2,46,92);
 int highlightColor = color(244,144,24);
@@ -11,6 +12,7 @@ void setupGui() {
   createBottomButtons();
   createLengthGroup();
   createScalesGroup();
+  createSaveLoadGroup();
 }
 
 void mouseDragged() {
@@ -39,6 +41,7 @@ public void lengthButton(int theValue) {
     stave.stopAlteringLength();
   } else {
     scalesGroup.hide();
+    saveLoadGroup.hide();
     lengthGroup.show();
     stave.startAlteringLength();
   }
@@ -47,6 +50,7 @@ public void lengthButton(int theValue) {
 public void scalesButton(int theValue) {
   if(scalesGroup.isVisible()) {
     scalesGroup.hide();
+    saveLoadGroup.hide();
     stave.canEdit = true;
   } else {
     lengthGroup.hide();
@@ -57,6 +61,21 @@ public void scalesButton(int theValue) {
   }
 }
 
+public void saveLoadButton(int theValue) {
+  if(saveLoadGroup.isVisible()) {
+    saveLoadGroup.hide();
+    stave.canEdit = true;
+  } else {
+    lengthGroup.hide();
+    scalesGroup.hide();
+    stave.stopAlteringLength();
+    
+    saveLoadGroup.show();
+    stave.canEdit = false;
+  }
+}
+
+
 public void doneAlteringLengthBut() {
   lengthGroup.hide();
   stave.stopAlteringLength();
@@ -66,6 +85,11 @@ public void doneAlteringScalesBut() {
   scalesGroup.hide();
   stave.canEdit = true;
   soundbox.updateScaleSounds();
+}
+
+public void closeSaveLoadButton() {
+  saveLoadGroup.hide();
+  stave.canEdit = true;
 }
 
 void createLengthGroup() {
@@ -80,7 +104,7 @@ void createLengthGroup() {
                    .hide()
                    ;
 
-  cp5.addTextlabel("label")
+  cp5.addTextlabel("lengthLabel")
      .setText("Drag the orange marker to create a loop.")
      .setPosition(10,20)
      .setWidth(40)
@@ -96,6 +120,10 @@ void createLengthGroup() {
      .setBroadcast(true)
      ;
 }
+
+/*
+ * Begin Scales Menu
+ */
 
 void createScalesGroup() {
   scalesGroup = cp5.addGroup("scalesGroup")
@@ -181,6 +209,100 @@ void createScalesGroup() {
      .setSize(180,40)
      .setGroup(scalesGroup)
      .setCaptionLabel("Done!")
+     .setBroadcast(true)
+     ;
+}
+
+/*
+ * End Scales group
+ */
+
+/*
+ * Begin saveLoad group
+ */
+
+void createSaveLoadGroup() {
+  saveLoadGroup = cp5.addGroup("saveLoadGroup")
+                   .setPosition(100,100)
+                   .hideArrow()
+                   .setCaptionLabel("Save / Load")
+                   .disableCollapse()
+                   .setWidth(600)
+                   .setBackgroundHeight(300)
+                   .setBackgroundColor(color(0,128))
+                   .hide()
+                   ;
+
+  // create SAVE header
+  cp5.addTextlabel("saveLabel")
+     .setText("SAVE")
+     .setPosition(125,50)
+     .setGroup(saveLoadGroup)
+     ;
+
+  // create Save Buttons
+  for (int i = 0; i < 8; i++) {
+    String buttonName = "save" + (i+1) + "But";
+    int yPos = 100;
+    int xIndex = i;
+    if(i > 3) {
+      yPos = 170;
+      xIndex = i - 4;
+    }
+    Button but = cp5.addButton(buttonName).setBroadcast(false)
+     .setPosition((25 + (xIndex*60)),yPos)
+     .setSize(50,50)
+     .setGroup(saveLoadGroup)
+     .setCaptionLabel(str(i+1))
+     .setBroadcast(true)
+    ;
+
+    but.getCaptionLabel().setSize(12);
+
+    // TODO: adapt this to highlight already saved scales
+    // if(normalizedScaleName.equals(soundbox.scaleRoot)) {
+    //   but.setColorBackground(highlightColor);
+    // }
+  }
+
+  // create LOAD header
+  cp5.addTextlabel("loadLabel")
+     .setText("LOAD")
+     .setPosition(425,50)
+     .setGroup(saveLoadGroup)
+     ;
+
+  // create Load Buttons
+  for (int i = 0; i < 8; i++) {
+    String buttonName = "load" + (i+1) + "But";
+    int yPos = 100;
+    int xIndex = i;
+    if(i > 3) {
+      yPos = 170;
+      xIndex = i - 4;
+    }
+    Button but = cp5.addButton(buttonName).setBroadcast(false)
+     .setPosition((300 + 25 + (xIndex*60)),yPos)
+     .setSize(50,50)
+     .setGroup(saveLoadGroup)
+     .setCaptionLabel(str(i+1))
+     .setBroadcast(true)
+    ;
+
+    but.getCaptionLabel().setSize(12);
+
+    // TODO: adapt this to highlight already saved scales
+    // if(normalizedScaleName.equals(soundbox.scaleRoot)) {
+    //   but.setColorBackground(highlightColor);
+    // }
+  }
+
+  // button to close without loading
+  cp5.addButton("closeSaveLoadButton").setBroadcast(false)
+     .setPosition(210,250)
+     .setSize(180,40)
+     .setGroup(saveLoadGroup)
+     .setCaptionLabel("Close")
      .setBroadcast(true)
      ;
 }
@@ -330,7 +452,7 @@ void createBottomButtons() {
 
   midiButton.setCaptionLabel("MIDI");
 
-  Button preferencesButton = cp5.addButton("preferencesButton")
+  Button saveLoadButton = cp5.addButton("saveLoadButton")
                                 .setBroadcast(false)
                                 .setValue(4)
                                 .setPosition(600,440)
@@ -338,5 +460,5 @@ void createBottomButtons() {
                                 .setBroadcast(true)
                                 ;
 
-  preferencesButton.setCaptionLabel("Preferences");
+  saveLoadButton.setCaptionLabel("Save / Load");
 }
