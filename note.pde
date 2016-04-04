@@ -75,7 +75,7 @@ class Note {
   void remove() {
     stave.notes.remove(this);
   }
-  
+ 
   boolean intersectedBy(int xPos) {
     if(((xPos) > (x-radius)) && ((xPos) < x+radius)) {
       return true;

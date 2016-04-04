@@ -3,6 +3,9 @@ ControllerGroup lengthGroup;
 ControllerGroup scalesGroup;
 ControllerGroup saveLoadGroup;
 
+Storage store;
+XML tuneXml;
+
 int defaultBgColor = color(2,46,92);
 int highlightColor = color(244,144,24);
 
@@ -374,44 +377,50 @@ void controlEvent(ControlEvent theEvent) {
       selectScaleTypeButton(name);
       break;
     case "save1But":
-      Storage store = new Storage(stave,soundbox);
-      XML tuneXml= store.tuneToXml();
+      store = new Storage(stave,soundbox);
+      tuneXml = store.tuneToXml();
       saveXML(tuneXml, "data/1.xml");
       break;
     case "save2But":
-      Storage store = new Storage(stave,soundbox);
-      XML tuneXml= store.tuneToXml();
+      store = new Storage(stave,soundbox);
+      tuneXml = store.tuneToXml();
       saveXML(tuneXml, "data/2.xml");
       break;
     case "save3But":
-      Storage store = new Storage(stave,soundbox);
-      XML tuneXml= store.tuneToXml();
+      store = new Storage(stave,soundbox);
+      tuneXml = store.tuneToXml();
       saveXML(tuneXml, "data/3.xml");
       break;
     case "save4But":
-      Storage store = new Storage(stave,soundbox);
-      XML tuneXml= store.tuneToXml();
+      store = new Storage(stave,soundbox);
+      tuneXml = store.tuneToXml();
       saveXML(tuneXml, "data/4.xml");
       break;
     case "save5But":
-      Storage store = new Storage(stave,soundbox);
-      XML tuneXml= store.tuneToXml();
+      store = new Storage(stave,soundbox);
+      tuneXml = store.tuneToXml();
       saveXML(tuneXml, "data/5.xml");
       break;
     case "save6But":
-      Storage store = new Storage(stave,soundbox);
-      XML tuneXml= store.tuneToXml();
+      store = new Storage(stave,soundbox);
+      tuneXml = store.tuneToXml();
       saveXML(tuneXml, "data/6.xml");
       break;
     case "save7But":
-      Storage store = new Storage(stave,soundbox);
-      XML tuneXml= store.tuneToXml();
+      store = new Storage(stave,soundbox);
+      tuneXml = store.tuneToXml();
       saveXML(tuneXml, "data/7.xml");
       break;
     case "save8But":
-      Storage store = new Storage(stave,soundbox);
-      XML tuneXml= store.tuneToXml();
+      store = new Storage(stave,soundbox);
+      tuneXml = store.tuneToXml();
       saveXML(tuneXml, "data/8.xml");
+      break;
+
+    case "load1But":
+      store = new Storage(stave,soundbox);
+      tuneXml = loadXML("data/1.xml");
+      store.xmlToTune(tuneXml);
       break;
   }
 }

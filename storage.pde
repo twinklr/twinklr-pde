@@ -25,4 +25,30 @@ class Storage {
 
     return xml;
   }
+
+  void xmlToTune(XML tuneXml) {
+    print(tuneXml.toString());
+
+    soundbox.scaleType = tuneXml.getString("scaletype");
+    soundbox.scaleRoot = tuneXml.getString("scaleroot");
+
+    soundbox.updateScaleSounds();
+
+    stave.staveWidth = tuneXml.getInt("stavewidth");
+
+    stave.removeAll();
+
+    XML[] childNotes = tuneXml.getChildren("note");
+
+    for (int i = 0; i < childNotes.length; i ++ ) {
+      // TODO playhead should not be here. it should be on stave.
+
+      int x = childNotes[i].getInt("x");
+      int y = childNotes[i].getInt("y");
+
+      Note n = new Note(x, y, stave, playhead, stave.parent);
+    
+      stave.notes.add(n);      
+    }
+  }
 }

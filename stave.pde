@@ -104,6 +104,10 @@ class Stave {
     }
   }
 
+  void removeAll() {
+    stave.notes = new ArrayList<Note>();
+  }
+
   int getColorIndexForNote(Note n) {
     int noteIndex = indexOfNote(n);
 
