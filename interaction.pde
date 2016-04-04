@@ -101,6 +101,11 @@ public void closeSaveLoadButton() {
   stave.canEdit = true;
 }
 
+public void resetButton() {
+  soundbox.reset();
+  stave.reset();
+}
+
 void createLengthGroup() {
   lengthGroup = cp5.addGroup("lengthGroup")
                    .setPosition(80,80)
@@ -288,6 +293,14 @@ void createSaveLoadGroup() {
      .setSize(180,40)
      .setGroup(saveLoadGroup)
      .setCaptionLabel("Close")
+     .setBroadcast(true)
+     ;
+
+  cp5.addButton("resetButton").setBroadcast(false)
+     .setPosition(495,250)
+     .setSize(60,40)
+     .setGroup(saveLoadGroup)
+     .setCaptionLabel("Reset")
      .setBroadcast(true)
      ;
 }

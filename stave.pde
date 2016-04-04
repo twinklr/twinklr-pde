@@ -105,7 +105,12 @@ class Stave {
   }
 
   void removeAll() {
-    stave.notes = new ArrayList<Note>();
+    notes = new ArrayList<Note>();
+  }
+
+  void reset() {
+    removeAll();
+    staveWidth = width - (xPadding*2);
   }
 
   int getColorIndexForNote(Note n) {

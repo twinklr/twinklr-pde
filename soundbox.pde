@@ -146,6 +146,12 @@ class Soundbox {
     loadScaleSounds(scaleType, scaleRoot); 
   }
 
+  void reset() {
+    scaleRoot = "c";
+    scaleType = "major";
+    updateScaleSounds();
+  }
+
   private void setupAllSounds() {
     // now: calculate all possible notes
       
