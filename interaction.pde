@@ -2,6 +2,7 @@ ControlP5 cp5;
 ControllerGroup lengthGroup;
 ControllerGroup scalesGroup;
 ControllerGroup saveLoadGroup;
+ControllerGroup playheadsGroup;
 
 Storage store;
 XML tuneXml;
@@ -20,6 +21,9 @@ void setupGui() {
 
   createSaveLoadGroup();
   updateSaveLoadGroup();
+
+  createPlayheadsGroup();
+  // updatePlayheadsGroup();
 }
 
 void mouseDragged() {
@@ -305,6 +309,114 @@ void createSaveLoadGroup() {
      .setBroadcast(true)
      ;
 }
+
+/*
+ * end save/load group
+ */
+
+/* 
+ *begin playheads group
+ */
+
+
+void createPlayheadsGroup() {
+  playheadsGroup = cp5.addGroup("playheadsGroup")
+                   .setPosition(100,100)
+                   .hideArrow()
+                   .setCaptionLabel("Playheads")
+                   .disableCollapse()
+                   .setWidth(600)
+                   .setBackgroundHeight(300)
+                   .setBackgroundColor(color(0,128))
+                   // .hide()
+                   ;
+
+  // create controls for Playhead ONE
+  // these should probably be locked
+  cp5.addTextlabel("playheadOneLabel")
+     .setText("ONE")
+     .setPosition(60,30)
+     .setGroup(playheadsGroup)
+     ;
+
+   // create controls for Playhead TWO
+  cp5.addTextlabel("playheadTwoLabel")
+     .setText("TWO")
+     .setPosition(210,30)
+     .setGroup(playheadsGroup)
+     ;
+
+  // create backward button
+  // create forward button
+  cp5.addToggle("togglePlayheadTwoDirection")
+     .setPosition(180,75)
+     .setSize(90,30)
+     .setValue(true)
+     .setState(false) // false is forwards
+     .setMode(ControlP5.SWITCH)
+     .setCaptionLabel("Direction")
+     .setGroup(playheadsGroup)
+     ;
+
+  cp5.getController("togglePlayheadTwoDirection").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
+
+  // create speed slider
+  cp5.addSlider("playheadTwoSpeed")
+     .setPosition(180,135)
+     .setSize(90,30)
+     .setRange(0.25,4)
+     .setValue(1)
+     .setCaptionLabel("Speed")
+     .setGroup(playheadsGroup)
+     ;
+
+  // cp5.getController("playheadTwoSpeed").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
+  cp5.getController("playheadTwoSpeed").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
+  
+  // create speed slider
+  cp5.addSlider("playheadTwoOffset")
+     .setPosition(180,185)
+     .setSize(90,30)
+     .setRange(0,400)
+     .setValue(0)
+     .setCaptionLabel("Offset")
+     .setGroup(playheadsGroup)
+     ;
+
+  // cp5.getController("playheadTwoOffset").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
+  cp5.getController("playheadTwoOffset").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
+
+  // create enable toggle with label
+  cp5.addToggle("enablePlayheadTwo")
+     .setPosition(180,235)
+     .setSize(90,40)
+     .setValue(true)
+     .setState(false) // false is forwards
+     .setCaptionLabel("ENABLE")
+     .setGroup(playheadsGroup)
+     ;
+
+  cp5.getController("enablePlayheadTwo").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingX(0);
+
+
+  // create controls for Playhead THREE
+  cp5.addTextlabel("playheadThreeLabel")
+     .setText("THREE")
+     .setPosition(360,30)
+     .setGroup(playheadsGroup)
+     ;
+
+  // create controls for Playhead FOUR
+  cp5.addTextlabel("playheadFourLabel")
+     .setText("FOUR")
+     .setPosition(510,30)
+     .setGroup(playheadsGroup)
+     ;
+}
+
+/*
+ * end playheads group
+ */
 
 void updateScalesGroup() {
   String[] scaleButtons = {"C", "D", "E", "F", "G", "A", "B", "C#", "Eb", "F#", "Ab", "Bb"};
