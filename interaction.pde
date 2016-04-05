@@ -331,6 +331,12 @@ void createPlayheadsGroup() {
                    // .hide()
                    ;
 
+  // varialbse for control positioning
+  int yOffset = 75;
+  int yControlSpacing = 60;
+  int controlWidth = 90;
+  int controlHeight = 30;
+
   // create controls for Playhead ONE
   // these should probably be locked
   cp5.addTextlabel("playheadOneLabel")
@@ -340,17 +346,22 @@ void createPlayheadsGroup() {
      ;
 
    // create controls for Playhead TWO
+
+  int xOffset = 180;
+  int titleOffset = xOffset+30;
+
+
   cp5.addTextlabel("playheadTwoLabel")
      .setText("TWO")
-     .setPosition(210,30)
+     .setPosition(titleOffset,30)
      .setGroup(playheadsGroup)
      ;
 
   // create backward button
   // create forward button
   cp5.addToggle("togglePlayheadTwoDirection")
-     .setPosition(180,75)
-     .setSize(90,30)
+     .setPosition(xOffset,yOffset)
+     .setSize(controlWidth,controlHeight)
      .setValue(true)
      .setState(false) // false is forwards
      .setMode(ControlP5.SWITCH)
@@ -362,8 +373,8 @@ void createPlayheadsGroup() {
 
   // create speed slider
   cp5.addSlider("playheadTwoSpeed")
-     .setPosition(180,135)
-     .setSize(90,30)
+     .setPosition(xOffset,yOffset + (1*yControlSpacing))
+     .setSize(controlWidth,controlHeight)
      .setRange(0.25,4)
      .setValue(1)
      .setCaptionLabel("Speed")
@@ -375,8 +386,8 @@ void createPlayheadsGroup() {
   
   // create speed slider
   cp5.addSlider("playheadTwoOffset")
-     .setPosition(180,185)
-     .setSize(90,30)
+     .setPosition(xOffset,yOffset + (2*yControlSpacing))
+     .setSize(controlWidth, controlHeight)
      .setRange(0,400)
      .setValue(0)
      .setCaptionLabel("Offset")
@@ -388,8 +399,8 @@ void createPlayheadsGroup() {
 
   // create enable toggle with label
   cp5.addToggle("enablePlayheadTwo")
-     .setPosition(180,235)
-     .setSize(90,40)
+     .setPosition(xOffset,245)
+     .setSize(controlWidth, 40)
      .setValue(true)
      .setState(false) // false is forwards
      .setCaptionLabel("ENABLE")
