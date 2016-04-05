@@ -10,6 +10,9 @@ XML tuneXml;
 int defaultBgColor = color(2,46,92);
 int highlightColor = color(244,144,24);
 
+int xOffset;
+int titleOffset;
+
 void setupGui() {
   cp5 = new ControlP5(this);
 
@@ -347,8 +350,8 @@ void createPlayheadsGroup() {
 
    // create controls for Playhead TWO
 
-  int xOffset = 180;
-  int titleOffset = xOffset+30;
+  xOffset = 180;
+  titleOffset = xOffset+30;
 
 
   cp5.addTextlabel("playheadTwoLabel")
@@ -411,11 +414,67 @@ void createPlayheadsGroup() {
 
 
   // create controls for Playhead THREE
+
+  xOffset = 330;
+  titleOffset = xOffset+25;
+
   cp5.addTextlabel("playheadThreeLabel")
      .setText("THREE")
-     .setPosition(360,30)
+     .setPosition(titleOffset,30)
      .setGroup(playheadsGroup)
      ;
+
+  // create backward button
+  // create forward button
+  cp5.addToggle("togglePlayheadThreeDirection")
+     .setPosition(xOffset,yOffset)
+     .setSize(controlWidth,controlHeight)
+     .setValue(true)
+     .setState(false) // false is forwards
+     .setMode(ControlP5.SWITCH)
+     .setCaptionLabel("Direction")
+     .setGroup(playheadsGroup)
+     ;
+
+  cp5.getController("togglePlayheadThreeDirection").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
+
+  // create speed slider
+  cp5.addSlider("playheadThreeSpeed")
+     .setPosition(xOffset,yOffset + (1*yControlSpacing))
+     .setSize(controlWidth,controlHeight)
+     .setRange(0.25,4)
+     .setValue(1)
+     .setCaptionLabel("Speed")
+     .setGroup(playheadsGroup)
+     ;
+
+  // cp5.getController("playheadThreeSpeed").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
+  cp5.getController("playheadThreeSpeed").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
+  
+  // create speed slider
+  cp5.addSlider("playheadThreeOffset")
+     .setPosition(xOffset,yOffset + (2*yControlSpacing))
+     .setSize(controlWidth, controlHeight)
+     .setRange(0,400)
+     .setValue(0)
+     .setCaptionLabel("Offset")
+     .setGroup(playheadsGroup)
+     ;
+
+  // cp5.getController("playheadThreeOffset").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
+  cp5.getController("playheadThreeOffset").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
+
+  // create enable toggle with label
+  cp5.addToggle("enablePlayheadThree")
+     .setPosition(xOffset,245)
+     .setSize(controlWidth, 40)
+     .setValue(true)
+     .setState(false) // false is forwards
+     .setCaptionLabel("ENABLE")
+     .setGroup(playheadsGroup)
+     ;
+
+  cp5.getController("enablePlayheadThree").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingX(0);
 
   // create controls for Playhead FOUR
   cp5.addTextlabel("playheadFourLabel")
