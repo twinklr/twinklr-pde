@@ -16,6 +16,7 @@ class PlayheadManager {
     Playhead p3 = new Playhead(stave, parent, color(0,0,128), true);
     p3.changeOffset(300);
     p3.directionOffset = -1;
+    p3.direction = 0;
     p3.speed = 0.5;
     playheads[2] = p3;
 
@@ -33,23 +34,27 @@ class PlayheadManager {
   }
 
   void playNotes() {
-    // if(intersectedBy(playhead.position) && !played) {
-    //   // println(stave.indexOfNote(this));
-    //   stave.soundBox.playSound(stave.indexOfNote(this));
-    //   played = true;
-    // }
-
-    // TODO
-    // if(intersectedBy(playhead.position)) {
-    //   strokeWeight(3);
-    //   stroke(128,0,0);
-    // } else {
+    for (Playhead p : playheads) {
+      if(p.active) {
+        p.playNotes();
+      }
+    }
   }
 
   void modifyPositionBy(float amt) {
     for (Playhead p : playheads) {
       if(p.active) {
         p.modifyPositionBy(amt);
+      }
+    }
+  }
+
+  void updatePlayheadsToWidth() {
+    for (Playhead p : playheads) {
+      if(p.active) {
+        if(p.position > stave.staveWidth) {
+          p.position = stave.staveWidth;
+        }
       }
     }
   }

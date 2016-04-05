@@ -25,9 +25,7 @@ void setupGui() {
 void mouseDragged() {
   if(stave.alteringLength) {
     stave.updateWidthFromAbs(mouseX);
-    if(playhead.position > stave.staveWidth) {
-      playhead.position = stave.staveWidth;
-    }
+    playheadManager.updatePlayheadsToWidth();
   }
 }
 

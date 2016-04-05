@@ -38,6 +38,11 @@ class Note {
     
     ellipse(absX, absY,startDiameter,startDiameter);
   }
+
+  void play() {
+    stave.soundBox.playSound(stave.indexOfNote(this));
+    println("Play");
+  }
   
   void destroy() {
     shrinkAni.setBegin();

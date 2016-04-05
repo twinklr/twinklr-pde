@@ -7,6 +7,8 @@ class Playhead {
   boolean active;
   int col;
 
+  ArrayList<Integer> playedNotes;
+
   PApplet parent;
   Stave stave;
 
@@ -21,6 +23,8 @@ class Playhead {
     speed = 1.0;
     active = a;
     col = c;
+
+    clearPlayed();
   }
 
   void changeOffset(int offset) {
@@ -55,20 +59,41 @@ class Playhead {
     // notify stave if we've changed direction
     if((direction == 1) && (amt < 0)) {
       direction = 1 - direction;
-      // stave.resetNotes();
+      clearPlayed();
     }
     if((direction == 0) && (amt > 0)) {
       direction = 1 - direction;
-      // stave.resetNotes();
+      clearPlayed();
     }
 
     if(position > stave.staveWidth) {
       position = position % stave.staveWidth;
-      // stave.resetNotes();
+      clearPlayed();
     }
     if(position < 0) {
       position = stave.staveWidth + position;
-      // stave.resetNotes();
+      clearPlayed();
     }
   }
+
+  void playNotes() {
+    for (Note n : stave.notes) {
+      if(n.intersectedBy(position)) {
+        // println("I should play " + n);
+        if(playedNotes.indexOf(n.hashCode()) < 0) {
+          println("Note not in played list");
+          n.play();
+          playedNotes.add(n.hashCode());
+          println(playedNotes.indexOf(n.hashCode()));
+        } else {
+          // println("But I won't: Note in played list at index ", playedNotes.indexOf(n.hashCode()));
+        }
+      }
+    }
+  }
+
+  void clearPlayed() {
+    playedNotes = new ArrayList<Integer>();
+  }
+
 }
