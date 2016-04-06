@@ -29,7 +29,7 @@ void setupGui() {
   updateSaveLoadGroup();
 
   createPlayheadsGroup();
-  updatePlayheadsGroup();
+  // updatePlayheadsGroup();
 }
 
 void mouseDragged() {
@@ -698,7 +698,7 @@ void updateSaveLoadGroup() {
 void updatePlayheadsGroup() {
   String[] playheadNames = {"One", "Two", "Three", "Four"};
 
-  for(int i = 0; i < playheadManager.playheads.length; i++) {
+  for(int i = 1; i < playheadManager.playheads.length; i++) {
     int n = i + 1;
     Playhead p = playheadManager.playheads[i];
 
@@ -709,14 +709,18 @@ void updatePlayheadsGroup() {
 
     // update direction
     Toggle tog = (Toggle)cp5.getController(directionName);
-    // tog.setState((p.direction==1));
+    if(p.directionOffset==1) {
+      tog.setBroadcast(false).setState(false).setBroadcast(true);
+    } else {
+      tog.setBroadcast(false).setState(true).setBroadcast(true);
+    }
     // update enabled
     Toggle but = (Toggle)cp5.getController(enabledName);
-    // if(p.active) {
-    //   but.setState(false);
-    // } else {
-    //   but.setState(true);
-    // }
+    if(p.active) {
+      but.setBroadcast(false).setState(true).setBroadcast(true);
+    } else {
+      but.setBroadcast(false).setState(false).setBroadcast(true);
+    }
     // update offset if it's not the same
     Slider s1 = (Slider)cp5.getController(offsetName);
     s1.setBroadcast(false).setValue(p.offset).setBroadcast(true);
