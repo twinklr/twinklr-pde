@@ -38,18 +38,14 @@ class PlayheadManager {
 
   void modifyPositionBy(float amt) {
     for (Playhead p : playheads) {
-      if(p.active) {
-        p.modifyPositionBy(amt);
-      }
+      p.modifyPositionBy(amt);
     }
   }
 
   void updatePlayheadsToWidth() {
     for (Playhead p : playheads) {
-      if(p.active) {
-        if(p.position > stave.staveWidth) {
-          p.position = stave.staveWidth;
-        }
+      if(p.position > stave.staveWidth) {
+        p.position = stave.staveWidth;
       }
     }
   }

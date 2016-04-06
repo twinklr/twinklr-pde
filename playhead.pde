@@ -29,6 +29,7 @@ class Playhead {
 
   void activate() {
     active = true;
+    render();
   }
 
   void deactivate() {
@@ -39,9 +40,15 @@ class Playhead {
     active = !active;
   }
 
-  void changeOffset(int o) {
+  void changeOffset(int o, int reference) {
     offset = o;
-    position += offset;
+    position = reference + o;
+    if(position > stave.staveWidth) {
+      position = position % stave.staveWidth;
+    }
+    if(position < 0) {
+      position = stave.staveWidth + position;
+    }
   }
 
   void render() {

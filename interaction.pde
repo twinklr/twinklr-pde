@@ -29,7 +29,7 @@ void setupGui() {
   updateSaveLoadGroup();
 
   createPlayheadsGroup();
-  // updatePlayheadsGroup();
+  updatePlayheadsGroup();
 }
 
 void mouseDragged() {
@@ -58,6 +58,7 @@ public void lengthButton(int theValue) {
   } else {
     scalesGroup.hide();
     saveLoadGroup.hide();
+    playheadsGroup.hide();
     lengthGroup.show();
     stave.startAlteringLength();
   }
@@ -67,6 +68,7 @@ public void scalesButton(int theValue) {
   if(scalesGroup.isVisible()) {
     scalesGroup.hide();
     saveLoadGroup.hide();
+    playheadsGroup.hide();
     stave.canEdit = true;
   } else {
     lengthGroup.hide();
@@ -87,6 +89,7 @@ public void saveLoadButton(int theValue) {
   } else {
     lengthGroup.hide();
     scalesGroup.hide();
+    playheadsGroup.hide();
     stave.stopAlteringLength();
     
     updateSaveLoadGroup();
@@ -94,6 +97,23 @@ public void saveLoadButton(int theValue) {
     stave.canEdit = false;
   }
 }
+
+public void playheadsButton(int theValue) {
+  if(playheadsGroup.isVisible()) {
+    playheadsGroup.hide();
+    stave.canEdit = true;
+  } else {
+    lengthGroup.hide();
+    scalesGroup.hide();
+    saveLoadGroup.hide();
+    stave.stopAlteringLength();
+    
+    updatePlayheadsGroup();
+    playheadsGroup.show();
+    stave.canEdit = false;
+  }
+}
+
 
 
 public void doneAlteringLengthBut() {
@@ -334,7 +354,7 @@ void createPlayheadsGroup() {
                    .setWidth(600)
                    .setBackgroundHeight(300)
                    .setBackgroundColor(color(0,128))
-                   // .hide()
+                   .hide()
                    ;
 
   // varialbse for control positioning
@@ -355,6 +375,7 @@ void createPlayheadsGroup() {
      ;
 
   cp5.addToggle("togglePlayheadOneDirection")
+     .setBroadcast(false)
      .setPosition(xOffset,yOffset)
      .setSize(controlWidth,controlHeight)
      .setValue(true)
@@ -362,6 +383,7 @@ void createPlayheadsGroup() {
      .setMode(ControlP5.SWITCH)
      .setCaptionLabel("Direction")
      .setLock(true)
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -369,12 +391,14 @@ void createPlayheadsGroup() {
 
   // create speed slider
   cp5.addSlider("playheadOneSpeed")
+     .setBroadcast(false)
      .setPosition(xOffset,yOffset + (1*yControlSpacing))
      .setSize(controlWidth,controlHeight)
      .setRange(0.25,4)
      .setValue(1)
      .setLock(true)
      .setCaptionLabel("Speed")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -383,12 +407,14 @@ void createPlayheadsGroup() {
   
   // create speed slider
   cp5.addSlider("playheadOneOffset")
+     .setBroadcast(false)
      .setPosition(xOffset,yOffset + (2*yControlSpacing))
      .setSize(controlWidth, controlHeight)
      .setRange(0,400)
      .setValue(0)
      .setCaptionLabel("Offset")
      .setLock(true)
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -397,12 +423,14 @@ void createPlayheadsGroup() {
 
   // create enable toggle with label
   cp5.addToggle("enablePlayheadOne")
+     .setBroadcast(false)
      .setPosition(xOffset,245)
      .setSize(controlWidth, 40)
      .setValue(true)
      .setState(true)
      .setCaptionLabel("ENABLE")
      .setLock(true)
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -423,12 +451,14 @@ void createPlayheadsGroup() {
   // create backward button
   // create forward button
   cp5.addToggle("togglePlayheadTwoDirection")
+     .setBroadcast(false)
      .setPosition(xOffset,yOffset)
      .setSize(controlWidth,controlHeight)
      .setValue(true)
      .setState(false) // false is forwards
      .setMode(ControlP5.SWITCH)
      .setCaptionLabel("Direction")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -436,11 +466,13 @@ void createPlayheadsGroup() {
 
   // create speed slider
   cp5.addSlider("playheadTwoSpeed")
+     .setBroadcast(false)
      .setPosition(xOffset,yOffset + (1*yControlSpacing))
      .setSize(controlWidth,controlHeight)
      .setRange(0.25,4)
      .setValue(1)
      .setCaptionLabel("Speed")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -449,11 +481,13 @@ void createPlayheadsGroup() {
   
   // create speed slider
   cp5.addSlider("playheadTwoOffset")
+     .setBroadcast(false)
      .setPosition(xOffset,yOffset + (2*yControlSpacing))
      .setSize(controlWidth, controlHeight)
      .setRange(0,400)
      .setValue(0)
      .setCaptionLabel("Offset")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -462,11 +496,13 @@ void createPlayheadsGroup() {
 
   // create enable toggle with label
   cp5.addToggle("enablePlayheadTwo")
+     .setBroadcast(false)
      .setPosition(xOffset,245)
      .setSize(controlWidth, 40)
      .setValue(true)
      .setState(false) // false is forwards
      .setCaptionLabel("ENABLE")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -487,12 +523,14 @@ void createPlayheadsGroup() {
   // create backward button
   // create forward button
   cp5.addToggle("togglePlayheadThreeDirection")
+     .setBroadcast(false)
      .setPosition(xOffset,yOffset)
      .setSize(controlWidth,controlHeight)
      .setValue(true)
      .setState(false) // false is forwards
      .setMode(ControlP5.SWITCH)
      .setCaptionLabel("Direction")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -500,11 +538,13 @@ void createPlayheadsGroup() {
 
   // create speed slider
   cp5.addSlider("playheadThreeSpeed")
+     .setBroadcast(false)
      .setPosition(xOffset,yOffset + (1*yControlSpacing))
      .setSize(controlWidth,controlHeight)
      .setRange(0.25,4)
      .setValue(1)
      .setCaptionLabel("Speed")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -513,11 +553,13 @@ void createPlayheadsGroup() {
   
   // create speed slider
   cp5.addSlider("playheadThreeOffset")
+     .setBroadcast(false)
      .setPosition(xOffset,yOffset + (2*yControlSpacing))
      .setSize(controlWidth, controlHeight)
      .setRange(0,400)
      .setValue(0)
      .setCaptionLabel("Offset")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -526,11 +568,13 @@ void createPlayheadsGroup() {
 
   // create enable toggle with label
   cp5.addToggle("enablePlayheadThree")
+     .setBroadcast(false)
      .setPosition(xOffset,245)
      .setSize(controlWidth, 40)
      .setValue(true)
      .setState(false) // false is forwards
      .setCaptionLabel("ENABLE")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -550,12 +594,14 @@ void createPlayheadsGroup() {
   // create backward button
   // create forward button
   cp5.addToggle("togglePlayheadFourDirection")
+     .setBroadcast(false)
      .setPosition(xOffset,yOffset)
      .setSize(controlWidth,controlHeight)
      .setValue(true)
      .setState(false) // false is forwards
      .setMode(ControlP5.SWITCH)
      .setCaptionLabel("Direction")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -563,11 +609,13 @@ void createPlayheadsGroup() {
 
   // create speed slider
   cp5.addSlider("playheadFourSpeed")
+     .setBroadcast(false)
      .setPosition(xOffset,yOffset + (1*yControlSpacing))
      .setSize(controlWidth,controlHeight)
      .setRange(0.25,4)
      .setValue(1)
      .setCaptionLabel("Speed")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -576,11 +624,13 @@ void createPlayheadsGroup() {
   
   // create speed slider
   cp5.addSlider("playheadFourOffset")
+     .setBroadcast(false)
      .setPosition(xOffset,yOffset + (2*yControlSpacing))
      .setSize(controlWidth, controlHeight)
      .setRange(0,400)
      .setValue(0)
      .setCaptionLabel("Offset")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -589,11 +639,13 @@ void createPlayheadsGroup() {
 
   // create enable toggle with label
   cp5.addToggle("enablePlayheadFour")
+     .setBroadcast(false)
      .setPosition(xOffset,245)
      .setSize(controlWidth, 40)
      .setValue(true)
      .setState(false) // false is forwards
      .setCaptionLabel("ENABLE")
+     .setBroadcast(true)
      .setGroup(playheadsGroup)
      ;
 
@@ -902,7 +954,7 @@ void selectScaleButton(String scaleButtonName) {
   deselectAllScaleButtons();
   // select this Button
   but.setColorBackground(highlightColor);
-  // TODO: select this scale
+  // select this scale
 
   String shortName = scaleButtonName.replace("scale", "").replace("But", "").replace("sharp", "#").replace("flat", "b");
   String scaleRoot = soundbox.normalizeScaleName(shortName);
@@ -954,7 +1006,11 @@ void updatePlayheadOffset(int pN, int off) {
 
   Playhead p = playheadManager.playheads[index];
 
-  p.changeOffset(off);
+  println("Setting offset to ", off);
+
+  p.changeOffset(off, playheadManager.playheads[0].position);
+
+  println("Playhead offset is now ", p.offset);
 
   updatePlayheadsGroup();
 }
