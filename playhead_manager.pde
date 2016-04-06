@@ -1,7 +1,7 @@
-Playhead[] playheads;
-PApplet parent;
-
 class PlayheadManager {
+  Playhead[] playheads;
+  PApplet parent;
+
   PlayheadManager (Stave s, PApplet p) {  
     playheads = new Playhead[4];
     parent = p;

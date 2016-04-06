@@ -13,6 +13,9 @@ int highlightColor = color(244,144,24);
 int xOffset;
 int titleOffset;
 
+float s;
+int o;
+
 void setupGui() {
   cp5 = new ControlP5(this);
 
@@ -640,6 +643,38 @@ void updateSaveLoadGroup() {
   } 
 }
 
+void updatePlayheadsGroup() {
+  String[] playheadNames = {"One", "Two", "Three", "Four"};
+
+  for(int i = 0; i < playheadManager.playheads.length; i++) {
+    int n = i + 1;
+    Playhead p = playheadManager.playheads[i];
+
+    String directionName = "togglePlayhead" + playheadNames[i] + "Direction";
+    String enabledName = "enablePlayhead" + playheadNames[i];
+    String offsetName = "playhead" + playheadNames[i] + "Offset";
+    String speedName = "playhead" + playheadNames[i] + "Speed";
+
+    // update direction
+    Toggle tog = (Toggle)cp5.getController(directionName);
+    // tog.setState((p.direction==1));
+    // update enabled
+    Toggle but = (Toggle)cp5.getController(enabledName);
+    // if(p.active) {
+    //   but.setState(false);
+    // } else {
+    //   but.setState(true);
+    // }
+    // update offset if it's not the same
+    Slider s1 = (Slider)cp5.getController(offsetName);
+    s1.setBroadcast(false).setValue(p.offset).setBroadcast(true);
+    // update speed if it's not the same
+    Slider s2 = (Slider)cp5.getController(speedName);
+    s2.setBroadcast(false).setValue(p.speed).setBroadcast(true);
+  }
+  
+}
+
 void controlEvent(ControlEvent theEvent) {
   String name = theEvent.getName();
   switch(name) {
@@ -755,6 +790,75 @@ void controlEvent(ControlEvent theEvent) {
     case "load8But":
       loadTune("data/8.xml");
       break;
+
+    // playheads
+
+    // SPEED
+    case "playheadOneSpeed":
+      s = theEvent.getController().getValue();
+      updatePlayheadSpeed(1, s);
+      break;
+    case "playheadTwoSpeed":
+      s = theEvent.getController().getValue();
+      updatePlayheadSpeed(2, s);
+      break;
+    case "playheadThreeSpeed":
+      s = theEvent.getController().getValue();
+      updatePlayheadSpeed(3, s);
+      break;
+    case "playheadFourSpeed":
+      s = theEvent.getController().getValue();
+      updatePlayheadSpeed(4, s);
+      break;
+
+
+    // OFFSET
+    case "playheadOneOffset":
+      o = (int)(theEvent.getController().getValue());
+      updatePlayheadOffset(1, o);
+      break;
+    case "playheadTwoOffset":
+      o = (int)(theEvent.getController().getValue());
+      updatePlayheadOffset(2, o);
+      break;
+    case "playheadThreeOffset":
+      o = (int)(theEvent.getController().getValue());
+      updatePlayheadOffset(3, o);
+      break;
+    case "playheadFourOffset":
+      o = (int)(theEvent.getController().getValue());
+      updatePlayheadOffset(4, o);
+      break;
+
+
+
+    // DIRECTION
+    case "togglePlayheadOneDirection":
+      togglePlayheadDirection(1);
+      break;
+    case "togglePlayheadTwoDirection":
+      togglePlayheadDirection(2);
+      break;
+    case "togglePlayheadThreeDirection":
+      togglePlayheadDirection(3);
+      break;
+    case "togglePlayheadFourDirection":
+      togglePlayheadDirection(4);
+      break;
+
+    //enable
+    case "enablePlayheadOne":
+      enablePlayhead(1);
+      break;
+    case "enablePlayheadTwo":
+      enablePlayhead(2);
+      break;
+    case "enablePlayheadThree":
+      enablePlayhead(3);
+      break;
+    case "enablePlayheadFour":
+      enablePlayhead(4);
+      break;
   }
 }
 
@@ -817,6 +921,52 @@ void selectScaleTypeButton(String scaleTypeButtonName) {
 
   soundbox.scaleType = scaleType;
   updateScalesGroup();
+}
+
+void enablePlayhead(int pN) {
+  int index = pN - 1;
+
+  Playhead p = playheadManager.playheads[index];
+  if(p.active) {
+    p.deactivate();
+  } else {
+    p.activate();
+  }
+  updatePlayheadsGroup();
+}
+
+void togglePlayheadDirection(int pN) {
+  int index = pN - 1;
+
+  Playhead p = playheadManager.playheads[index];
+  if(p.directionOffset == 1) {
+    p.directionOffset = -1;
+    p.direction = 1 - p.direction;
+  } else {
+    p.directionOffset = 1;
+    p.direction = 1 - p.direction;
+  }
+  updatePlayheadsGroup();
+}
+
+void updatePlayheadOffset(int pN, int off) {
+  int index = pN - 1;
+
+  Playhead p = playheadManager.playheads[index];
+
+  p.changeOffset(off);
+
+  updatePlayheadsGroup();
+}
+
+void updatePlayheadSpeed(int pN, float s) {
+  int index = pN - 1;
+
+  Playhead p = playheadManager.playheads[index];
+
+  p.speed = s;
+
+  updatePlayheadsGroup();
 }
 
 void createBottomButtons() {

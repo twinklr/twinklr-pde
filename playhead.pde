@@ -27,7 +27,20 @@ class Playhead {
     clearPlayed();
   }
 
-  void changeOffset(int offset) {
+  void activate() {
+    active = true;
+  }
+
+  void deactivate() {
+    active = false;
+  }
+
+  void toggle() {
+    active = !active;
+  }
+
+  void changeOffset(int o) {
+    offset = o;
     position += offset;
   }
 
