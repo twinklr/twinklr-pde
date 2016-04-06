@@ -926,6 +926,7 @@ void loadTune(String filename) {
   tuneXml = loadXML(filename);
   store.xmlToTune(tuneXml);
   updateScalesGroup();
+  updatePlayheadsGroup();
 }
 
 void deselectAllScaleButtons() {
