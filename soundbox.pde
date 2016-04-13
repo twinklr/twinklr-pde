@@ -1,24 +1,26 @@
 import java.util.Map;
-import ddf.minim.*;
-import ddf.minim.ugens.*;
+import beads.*;
 
 class Soundbox { 
   String scaleType, scaleRoot;
   HashMap<String, int[]> scales;
   String[] allNotes, scaleNotes;
-  Sampler[] allSounds, scaleSounds;
+  Sample[] allSounds, scaleSounds;
   PApplet parent;
   int noteCount;
 
-  Minim minim;
-  AudioOutput output;
+  AudioContext ac;
+  Gain gain;
+  SamplePlayer samplePlayer;
 
   Soundbox (int nc, PApplet parent) {  
     noteCount = nc;
     this.parent = parent;
 
-    minim = new Minim(parent);
-    output = minim.getLineOut();
+    ac = new AudioContext();
+    gain = new Gain(ac, 2, 0.2);
+    ac.out.addInput(gain);
+    ac.start();
 
     buildScales();
     setupAllSounds();
@@ -31,31 +33,31 @@ class Soundbox {
 
   void loadScaleSounds(String t, String r) {
     scaleNotes = new String[0];
-    scaleSounds = new Sampler[0];
+    scaleSounds = new Sample[0];
     
     String[] tempNotes = allNotes;
-    Sampler[] tempSounds = allSounds;
+    Sample[] tempSounds = allSounds;
 
     // shuffle off any notes before our chosen root.
     while(!tempNotes[0].substring(0, tempNotes[0].length()-1).equals(r)) {
       tempNotes = subset(tempNotes,1);
-      tempSounds = (Sampler[]) subset(tempSounds,1);
+      tempSounds = (Sample[]) subset(tempSounds,1);
     }
 
     String[] allNotesBeginningWithRoot = tempNotes;
-    Sampler[] allSoundsBeginningWithRoot = tempSounds;
+    Sample[] allSoundsBeginningWithRoot = tempSounds;
     int[] scaleIntervals = scales.get(t);
 
     // put the first note in
     scaleNotes = append(scaleNotes, allNotesBeginningWithRoot[0]);
-    scaleSounds = (Sampler[]) append(scaleSounds, allSoundsBeginningWithRoot[0]);
+    scaleSounds = (Sample[]) append(scaleSounds, allSoundsBeginningWithRoot[0]);
 
     while(allNotesBeginningWithRoot.length > 0) {
       // if there's an interval to skip, skip it...
 
       for(int i = 0; i < scaleIntervals[0]; i++) {
         allNotesBeginningWithRoot = subset(allNotesBeginningWithRoot,1);
-        allSoundsBeginningWithRoot = (Sampler[]) subset(allSoundsBeginningWithRoot,1);
+        allSoundsBeginningWithRoot = (Sample[]) subset(allSoundsBeginningWithRoot,1);
         if(allNotesBeginningWithRoot.length == 0) {
           break;
         }
@@ -67,7 +69,7 @@ class Soundbox {
 
       // and append the next note after the interval
       scaleNotes = append(scaleNotes, allNotesBeginningWithRoot[0]);
-      scaleSounds = (Sampler[]) append(scaleSounds, allSoundsBeginningWithRoot[0]);
+      scaleSounds = (Sample[]) append(scaleSounds, allSoundsBeginningWithRoot[0]);
 
       // rotate the intervals array
       int firstInterval = scaleIntervals[0];
@@ -78,7 +80,7 @@ class Soundbox {
 
     if(scaleNotes.length > noteCount) {
       scaleNotes = subset(scaleNotes,0,noteCount);
-      scaleSounds = (Sampler[]) subset(scaleSounds,0,noteCount);
+      scaleSounds = (Sample[]) subset(scaleSounds,0,noteCount);
     }
   }
 
@@ -89,7 +91,8 @@ class Soundbox {
 
   void playSound(int i) {
     if(i < scaleSounds.length) {
-      scaleSounds[i].trigger();
+      SamplePlayer sample = new SamplePlayer(ac, scaleSounds[i]);
+      gain.addInput(sample);
     }
   }
 
@@ -159,7 +162,7 @@ class Soundbox {
     String[] notes = {"c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b"};
 
     allNotes = new String[0];
-    allSounds = new Sampler[0];
+    allSounds = new Sample[0];
 
     for(int i = 0; i < octaves.length; i++) {
       for(int j = 0; j < notes.length; j++) {
@@ -184,12 +187,12 @@ class Soundbox {
 
     // now, let's load all sounds.
     for(int i = 0; i < allNotes.length; i++) {
-      String fullPath = "sounds/plinks/".concat(allNotes[i].concat(".aiff")).replaceAll("#", "sharp");
+      String soundPath = "/sounds/plinks/".concat(allNotes[i].concat(".aiff")).replaceAll("#", "sharp");
+      String fullPath = dataPath("") + soundPath;
 
-      Sampler sample  = new Sampler( fullPath, 4, minim );
-      sample.patch(output);
+      Sample sample = SampleManager.sample(fullPath);
 
-      allSounds = (Sampler[]) append(allSounds, sample);
+      allSounds = (Sample[]) append(allSounds, sample);
     }
   }
   
