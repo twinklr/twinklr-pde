@@ -191,6 +191,8 @@ class Soundbox {
       String fullPath = dataPath("") + soundPath;
 
       allSounds = (String[]) append(allSounds, fullPath);
+      println("Preloading ", fullPath);
+      Sample tempSample = SampleManager.sample(fullPath);
     }
   }
   
