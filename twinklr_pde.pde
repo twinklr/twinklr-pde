@@ -9,6 +9,8 @@ Soundbox soundbox;
 
 void setup() {
   size(800, 480);
+  // fullScreen();
+  
   smooth();
   background(255);
 
