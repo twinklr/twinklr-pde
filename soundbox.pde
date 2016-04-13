@@ -5,13 +5,12 @@ class Soundbox {
   String scaleType, scaleRoot;
   HashMap<String, int[]> scales;
   String[] allNotes, scaleNotes;
-  Sample[] allSounds, scaleSounds;
+  String[] allSounds, scaleSounds;
   PApplet parent;
   int noteCount;
 
   AudioContext ac;
   Gain gain;
-  SamplePlayer samplePlayer;
 
   Soundbox (int nc, PApplet parent) {  
     noteCount = nc;
@@ -33,31 +32,31 @@ class Soundbox {
 
   void loadScaleSounds(String t, String r) {
     scaleNotes = new String[0];
-    scaleSounds = new Sample[0];
+    scaleSounds = new String[0];
     
     String[] tempNotes = allNotes;
-    Sample[] tempSounds = allSounds;
+    String[] tempSounds = allSounds;
 
     // shuffle off any notes before our chosen root.
     while(!tempNotes[0].substring(0, tempNotes[0].length()-1).equals(r)) {
       tempNotes = subset(tempNotes,1);
-      tempSounds = (Sample[]) subset(tempSounds,1);
+      tempSounds = (String[]) subset(tempSounds,1);
     }
 
     String[] allNotesBeginningWithRoot = tempNotes;
-    Sample[] allSoundsBeginningWithRoot = tempSounds;
+    String[] allSoundsBeginningWithRoot = tempSounds;
     int[] scaleIntervals = scales.get(t);
 
     // put the first note in
     scaleNotes = append(scaleNotes, allNotesBeginningWithRoot[0]);
-    scaleSounds = (Sample[]) append(scaleSounds, allSoundsBeginningWithRoot[0]);
+    scaleSounds = (String[]) append(scaleSounds, allSoundsBeginningWithRoot[0]);
 
     while(allNotesBeginningWithRoot.length > 0) {
       // if there's an interval to skip, skip it...
 
       for(int i = 0; i < scaleIntervals[0]; i++) {
         allNotesBeginningWithRoot = subset(allNotesBeginningWithRoot,1);
-        allSoundsBeginningWithRoot = (Sample[]) subset(allSoundsBeginningWithRoot,1);
+        allSoundsBeginningWithRoot = (String[]) subset(allSoundsBeginningWithRoot,1);
         if(allNotesBeginningWithRoot.length == 0) {
           break;
         }
@@ -69,7 +68,7 @@ class Soundbox {
 
       // and append the next note after the interval
       scaleNotes = append(scaleNotes, allNotesBeginningWithRoot[0]);
-      scaleSounds = (Sample[]) append(scaleSounds, allSoundsBeginningWithRoot[0]);
+      scaleSounds = (String[]) append(scaleSounds, allSoundsBeginningWithRoot[0]);
 
       // rotate the intervals array
       int firstInterval = scaleIntervals[0];
@@ -80,7 +79,7 @@ class Soundbox {
 
     if(scaleNotes.length > noteCount) {
       scaleNotes = subset(scaleNotes,0,noteCount);
-      scaleSounds = (Sample[]) subset(scaleSounds,0,noteCount);
+      scaleSounds = (String[]) subset(scaleSounds,0,noteCount);
     }
   }
 
@@ -91,8 +90,9 @@ class Soundbox {
 
   void playSound(int i) {
     if(i < scaleSounds.length) {
-      SamplePlayer sample = new SamplePlayer(ac, scaleSounds[i]);
-      gain.addInput(sample);
+      SamplePlayer player = new SamplePlayer(ac, SampleManager.sample(scaleSounds[i]));
+      player.setKillOnEnd(true);
+      gain.addInput(player);
     }
   }
 
@@ -162,7 +162,7 @@ class Soundbox {
     String[] notes = {"c", "c#", "d", "d#", "e", "f", "f#", "g", "g#", "a", "a#", "b"};
 
     allNotes = new String[0];
-    allSounds = new Sample[0];
+    allSounds = new String[0];
 
     for(int i = 0; i < octaves.length; i++) {
       for(int j = 0; j < notes.length; j++) {
@@ -187,12 +187,10 @@ class Soundbox {
 
     // now, let's load all sounds.
     for(int i = 0; i < allNotes.length; i++) {
-      String soundPath = "/sounds/plinks/".concat(allNotes[i].concat(".aiff")).replaceAll("#", "sharp");
+      String soundPath = "/sounds/plinks/".concat(allNotes[i].concat(".mp3")).replaceAll("#", "sharp");
       String fullPath = dataPath("") + soundPath;
 
-      Sample sample = SampleManager.sample(fullPath);
-
-      allSounds = (Sample[]) append(allSounds, sample);
+      allSounds = (String[]) append(allSounds, fullPath);
     }
   }
   
