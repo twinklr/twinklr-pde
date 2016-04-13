@@ -39,11 +39,11 @@ void updatePosition() {
   // 3 = one step counter clockwise
   switch(delta) {
     case 1:
-      playheadManager.modifyPositionBy(1);
+      playheadManager.modifyPositionBy(-1);
       //console.log(count);
       break;
     case 3:
-      playheadManager.modifyPositionBy(-1);
+      playheadManager.modifyPositionBy(1);
       //console.log(count);
       break;
     case 2:
