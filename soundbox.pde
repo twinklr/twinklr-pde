@@ -90,6 +90,8 @@ class Soundbox {
 
   void playSound(int i) {
     if(i < scaleSounds.length) {
+      // todo
+      //if there's already a sample playing this note, can we take it over?
       SamplePlayer player = new SamplePlayer(ac, SampleManager.sample(scaleSounds[i]));
       player.setKillOnEnd(true);
       gain.addInput(player);
@@ -187,7 +189,7 @@ class Soundbox {
 
     // now, let's load all sounds.
     for(int i = 0; i < allNotes.length; i++) {
-      String soundPath = "/sounds/plinks/".concat(allNotes[i].concat(".mp3")).replaceAll("#", "sharp");
+      String soundPath = "/sounds/tinkles/".concat(allNotes[i].concat(".mp3")).replaceAll("#", "sharp");
       String fullPath = dataPath("") + soundPath;
 
       allSounds = (String[]) append(allSounds, fullPath);
