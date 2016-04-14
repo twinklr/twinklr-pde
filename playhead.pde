@@ -40,6 +40,14 @@ class Playhead {
     active = !active;
   }
 
+  boolean isForwards() {
+    return directionOffset > 0; 
+  }
+
+  boolean isBackwards() {
+    return directionOffset < 0;
+  }
+
   void changeOffset(int o, int reference) {
     offset = o;
     position = reference + o;
