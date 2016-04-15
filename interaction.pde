@@ -24,7 +24,6 @@ void setupGui() {
   pui = PUI.init(this).size(300, 300).hide();
 
   createBottomButtons();
-  createLengthGroup();
 
   createScalesGroup();
   updateScalesGroup();
@@ -35,10 +34,34 @@ void setupGui() {
 
 com.martinleopold.pui.Slider speed1Slider, offset1Slider, speed2Slider, offset2Slider, speed3Slider, offset3Slider, speed4Slider, offset4Slider;
 com.martinleopold.pui.Button playhead1Backwards, playhead1Forwards, playhead1Toggle, playhead2Backwards, playhead2Forwards, playhead2Toggle, playhead3Backwards, playhead3Forwards, playhead3Toggle, playhead4Backwards, playhead4Forwards, playhead4Toggle;
-boolean playheadsVisible = false;
+
+boolean playheadsMenuVisible = false;
+boolean lengthMenuVisible = false;
+
+void createPuiLengthGroup() {
+  stave.canEdit = false;
+  stave.startAlteringLength();
+
+  pui = PUI.init(this).size(276, height-40).theme("Grayday");
+  pui.padding(0.25, 0.5); // set padding (in grid units)
+  // pui.font("NewMedia Fett.ttf"); // set font
+
+  pui.addLabel("Change Stave Length").large();
+  pui.newRow();
+  pui.addLabel("Drag the orange marker to create a loop.");
+   pui.addButton().label("Done").size(16,5).calls("removePuiLengthGroup");
+}
+
+void removePuiLengthGroup() {
+  stave.stopAlteringLength();
+  pui.hide();
+  lengthMenuVisible = false;
+  stave.canEdit = true;
+}
 
 void createPuiPlayheadsGroup() {
   stave.canEdit = false;
+
   pui = PUI.init(this).size(710, height-40).theme("Grayday");
   pui.padding(0.25, 0.5); // set padding (in grid units)
   // pui.font("NewMedia Fett.ttf"); // set font
@@ -214,11 +237,11 @@ void createPuiPlayheadsGroup() {
     playhead4Toggle.label("");
   }
 
-  playheadsVisible= true;
+  playheadsMenuVisible= true;
 }
 
 void removePuiPlayheadsGroup() {
-  playheadsVisible= false;
+  playheadsMenuVisible= false;
   pui.hide();
   stave.canEdit = true;
   // pui.setLayout(new Layout(width, height, 0, 0, 0));
@@ -372,8 +395,16 @@ void mousePressed() {
 
 void keyPressed() {
   switch (key) {
+    case '1':
+      if(lengthMenuVisible) {
+        removePuiLengthGroup();
+        // pui.hide();
+      } else {
+        createPuiLengthGroup();
+      }
+      break;
     case '3':
-      if(playheadsVisible) {
+      if(playheadsMenuVisible) {
         removePuiPlayheadsGroup();
         // pui.hide();
       } else {
@@ -387,18 +418,6 @@ void mouseWheel(MouseEvent event) {
   float e = event.getCount();
 
   playheadManager.modifyPositionBy(e);
-}
-
-public void lengthButton(int theValue) {
-  if(lengthGroup.isVisible()) {
-    lengthGroup.hide();
-    stave.stopAlteringLength();
-  } else {
-    scalesGroup.hide();
-    saveLoadGroup.hide();
-    lengthGroup.show();
-    stave.startAlteringLength();
-  }
 }
 
 public void scalesButton(int theValue) {
