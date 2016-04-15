@@ -8,6 +8,10 @@ class Soundbox {
   String[] allSounds, scaleSounds;
   PApplet parent;
   int noteCount;
+  
+  int polyphony = 16;
+  int currentPlayer = 0;
+  SamplePlayer[] players = new SamplePlayer[polyphony];
 
   AudioContext ac;
   Gain gain;
@@ -26,8 +30,17 @@ class Soundbox {
 
     scaleType = "major";
     scaleRoot = "c";
-
+    
     loadScaleSounds(scaleType, scaleRoot);
+    
+    // set up a bank of sixteen sample players.
+    // we'll iterate over these in a round-robin way for polyphony
+    
+    for(int i = 0; i < polyphony; i++) {
+      players[i] = new SamplePlayer(ac, 1);
+      players[i].setKillOnEnd(false);
+      gain.addInput(players[i]);
+    }
   } 
 
   void loadScaleSounds(String t, String r) {
@@ -90,11 +103,18 @@ class Soundbox {
 
   void playSound(int i) {
     if(i < scaleSounds.length) {
-      // todo
-      //if there's already a sample playing this note, can we take it over?
-      SamplePlayer player = new SamplePlayer(ac, SampleManager.sample(scaleSounds[i]));
-      player.setKillOnEnd(true);
-      gain.addInput(player);
+      // get the next SamplePlayer off the shelf
+      SamplePlayer sp = players[currentPlayer];
+      
+      
+      // update its sample
+      sp.setSample(SampleManager.sample(scaleSounds[i]));
+      // set it to the beginning and play it
+      sp.setToLoopStart();
+      sp.start();
+      // increment Sample player
+      currentPlayer = (currentPlayer + 1) % polyphony;
+      
     }
   }
 

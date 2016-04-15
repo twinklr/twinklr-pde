@@ -11,11 +11,13 @@ PImage loadingImg;
 boolean loaded = false;
 
 void setup() {
-  size(800, 480);;
-  
+  size(800, 480);
+  //fullScreen();
   smooth();
+  
   loadingImg = loadImage("twinklr-loading.jpg");
   background(loadingImg);  
+
   // GPIO.pinMode(pinA, GPIO.INPUT);
   // GPIO.attachInterrupt(pinA, this, "updatePinA", GPIO.CHANGE);
   
@@ -39,6 +41,7 @@ void draw() {
   }
 
   background(255);
+  
   stave.render();
   playheadManager.render();
   stave.drawNotes();
