@@ -4,7 +4,6 @@ ControlP5 cp5;
 ControllerGroup lengthGroup;
 ControllerGroup scalesGroup;
 ControllerGroup saveLoadGroup;
-ControllerGroup playheadsGroup;
 
 Storage store;
 XML tuneXml;
@@ -32,10 +31,6 @@ void setupGui() {
 
   createSaveLoadGroup();
   updateSaveLoadGroup();
-
-  createPlayheadsGroup();
-  // updatePlayheadsGroup();
-  
 }
 
 com.martinleopold.pui.Slider speed1Slider, offset1Slider, speed2Slider, offset2Slider, speed3Slider, offset3Slider, speed4Slider, offset4Slider;
@@ -44,13 +39,13 @@ boolean playheadsVisible = false;
 
 void createPuiPlayheadsGroup() {
   stave.canEdit = false;
-  pui = PUI.init(this).size(760, height-70).theme("Grayday").position(20,20);
+  pui = PUI.init(this).size(710, height-40).theme("Grayday");
   pui.padding(0.25, 0.5); // set padding (in grid units)
   // pui.font("NewMedia Fett.ttf"); // set font
 
   // make controls for Playhead One
 
-  pui.addLabel("Playhead One").large();
+  pui.addLabel("1.").large();
   
   pui.newRow();
   
@@ -60,13 +55,14 @@ void createPuiPlayheadsGroup() {
 
   playhead1Backwards = pui.addButton().size(5,4).noLabel().calls("direction1Backwards").isPressed(false).deactivate();
   playhead1Forwards = pui.addButton().size(5,4).noLabel().calls("direction1Forwards").isPressed(true).deactivate();
+  playhead1Forwards.label("Forwards");
 
   pui.newRow();
   pui.addLabel("Offset").medium();
   pui.newRow();
   pui.addDivider();
   pui.newRow();
-  offset1Slider = pui.addSlider().size(16,6).noLabel().calls("offset1Value").min(0).max(400).value(0).deactivate();
+  offset1Slider = pui.addSlider().size(16,6).label("0").calls("offset1Value").min(0).max(400).value(0).deactivate();
 
   pui.newRow();
   pui.addLabel("Speed").medium();
@@ -77,11 +73,13 @@ void createPuiPlayheadsGroup() {
 
   pui.newRow();
 
-  playhead1Toggle = pui.addButton().noLabel().size(16,5).isPressed(true).deactivate();
+  playhead1Toggle = pui.addButton().label("Enabled").size(16,5).isPressed(true).deactivate();
   
   // make controls for Playhead Two
 
-  pui.addLabel("Playhead Two").large();
+  pui.newColumn();
+
+  pui.addLabel("2.").large();
   
   pui.newRow();
   
@@ -89,8 +87,13 @@ void createPuiPlayheadsGroup() {
   pui.addLabel("Direction").medium();
   pui.addDivider();
 
-  playhead2Backwards = pui.addButton().size(5,4).noLabel().calls("direction2Backwards").isPressed(playheadManager.playheads[1].isBackwards());
-  playhead2Forwards = pui.addButton().size(5,4).noLabel().calls("direction2Forwards").isPressed(playheadManager.playheads[1].isForwards());
+  playhead2Backwards = pui.addButton().size(5,4).noLabel().calls("direction2Backwards");
+  playhead2Forwards = pui.addButton().size(5,4).noLabel().calls("direction2Forwards");
+  if(playheadManager.playheads[1].isForwards()) {
+    direction2Forwards();
+  } else {
+    direction2Backwards();
+  }
 
   pui.newRow();
 
@@ -98,23 +101,31 @@ void createPuiPlayheadsGroup() {
   pui.newRow();
   pui.addDivider();
   pui.newRow();
-  offset2Slider = pui.addSlider().size(16,6).noLabel().calls("offset2Value").min(0).max(400).value(playheadManager.playheads[1].offset);
-pui.newRow();
+  offset2Slider = pui.addSlider().size(16,6).label(str((int)playheadManager.playheads[1].offset)).calls("offset2Value").min(0).max(400);
+  offset2Slider.value(playheadManager.playheads[1].offset);
+  pui.newRow();
   pui.addLabel("Speed").medium();
   pui.newRow();
   pui.addDivider();
   pui.newRow();
-  speed2Slider = pui.addSlider().size(16,6).label(str(playheadManager.playheads[1].speed)).calls("speed2Value").min(0.25).max(4).value(playheadManager.playheads[1].speed);
+  speed2Slider = pui.addSlider().size(16,6).label(str(playheadManager.playheads[1].speed)).calls("speed2Value").min(0.25).max(4);
+  speed2Slider.value(playheadManager.playheads[1].speed);
 
   pui.newRow();
 
-  playhead2Toggle = pui.addButton().noLabel().size(16,5).isPressed(playheadManager.playheads[1].active).calls("togglePlayhead2");
+  playhead2Toggle = pui.addButton().noLabel().size(16,5).calls("togglePlayhead2");
+  if(playheadManager.playheads[1].active) {
+    playhead2Toggle.label("Enabled");  
+  } else {
+    playhead2Toggle.label("");
+  }
+  
 
 
   // make controls for Playhead Three
   pui.newColumn();
 
-  pui.addLabel("Playhead Three").large();
+  pui.addLabel("3.").large();
   
   pui.newRow();
   
@@ -122,8 +133,14 @@ pui.newRow();
   pui.addLabel("Direction").medium();
   pui.addDivider();
 
-  playhead3Backwards = pui.addButton().size(5,4).noLabel().calls("direction3Backwards").isPressed(playheadManager.playheads[2].isBackwards());
-  playhead3Forwards = pui.addButton().size(5,4).noLabel().calls("direction3Forwards").isPressed(playheadManager.playheads[2].isForwards());
+  playhead3Backwards = pui.addButton().size(5,4).noLabel().calls("direction3Backwards");
+  playhead3Forwards = pui.addButton().size(5,4).noLabel().calls("direction3Forwards");
+
+  if(playheadManager.playheads[2].isForwards()) {
+    direction3Forwards();
+  } else {
+    direction3Backwards();
+  }
 
   pui.newRow();
 
@@ -131,19 +148,72 @@ pui.newRow();
   pui.newRow();
   pui.addDivider();
   pui.newRow();
-  offset3Slider = pui.addSlider().size(16,6).noLabel().calls("offset3Value").min(0).max(400).value(playheadManager.playheads[2].offset);
-pui.newRow();
+  offset3Slider = pui.addSlider().size(16,6).label(str((int)playheadManager.playheads[2].offset)).calls("offset3Value").min(0).max(400);
+  offset3Slider.value(playheadManager.playheads[2].offset);
+  pui.newRow();
   pui.addLabel("Speed").medium();
   pui.newRow();
   pui.addDivider();
   pui.newRow();
-  speed3Slider = pui.addSlider().size(16,6).label(str(playheadManager.playheads[2].speed)).calls("speed3Value").min(0.25).max(4).value(playheadManager.playheads[1].speed);
+  speed3Slider = pui.addSlider().size(16,6).label(str(playheadManager.playheads[2].speed)).calls("speed3Value").min(0.25).max(4);
+  speed3Slider.value(playheadManager.playheads[2].speed);
 
   pui.newRow();
 
-  playhead3Toggle = pui.addButton().noLabel().size(16,5).isPressed(playheadManager.playheads[2].active).calls("togglePlayhead3");
+  playhead3Toggle = pui.addButton().noLabel().size(16,5).calls("togglePlayhead3");
+  if(playheadManager.playheads[2].active) {
+    playhead3Toggle.label("Enabled");  
+  } else {
+    playhead3Toggle.label("");
+  }
 
-  pui.show();
+  // make controls for Playhead Four
+  pui.newColumn();
+
+  pui.addLabel("4.").large();
+  
+  pui.newRow();
+  
+  // pair of buttons for direction
+  pui.addLabel("Direction").medium();
+  pui.addDivider();
+
+  playhead4Backwards = pui.addButton().size(5,4).noLabel().calls("direction4Backwards");
+  playhead4Forwards = pui.addButton().size(5,4).noLabel().calls("direction4Forwards");
+
+  if(playheadManager.playheads[3].isForwards()) {
+    direction4Forwards();
+  } else {
+    direction4Backwards();
+  }
+
+  pui.newRow();
+
+  pui.addLabel("Offset").medium();
+  pui.newRow();
+  pui.addDivider();
+  pui.newRow();
+  offset4Slider = pui.addSlider().size(16,6).label(str((int)playheadManager.playheads[3].offset)).calls("offset4Value").min(0).max(400);
+  offset4Slider.value(playheadManager.playheads[3].offset);
+  pui.newRow();
+  pui.addLabel("Speed").medium();
+  pui.newRow();
+  pui.addDivider();
+  pui.newRow();
+  speed4Slider = pui.addSlider().size(16,6).label(str(playheadManager.playheads[3].speed)).calls("speed4Value").min(0.25).max(4);
+  speed4Slider.value(playheadManager.playheads[1].speed);
+
+  pui.newRow();
+
+  playhead4Toggle = pui.addButton().noLabel().size(16,5).calls("togglePlayhead4");
+  playhead4Toggle.isPressed(playheadManager.playheads[3].active);
+
+  if(playheadManager.playheads[3].active) {
+    playhead4Toggle.label("Enabled");  
+  } else {
+    playhead4Toggle.label("");
+  }
+
   playheadsVisible= true;
 }
 
@@ -160,24 +230,25 @@ void removePuiPlayheadsGroup() {
 void direction2Forwards() {
   setPlayheadDirection(2,1);
   playhead2Forwards.deactivate();
-  playhead2Forwards.isPressed(true);
+  playhead2Forwards.label("Forwards");
   playhead2Backwards.isPressed(false);
   playhead2Backwards.activate();
+  playhead2Backwards.label("");
 }
 
 void direction2Backwards() {
   setPlayheadDirection(2,-1);
   playhead2Forwards.activate();
-  playhead2Forwards.isPressed(false);
-  playhead2Backwards.isPressed(true);
+  playhead2Forwards.label("");
   playhead2Backwards.deactivate();
+  playhead2Backwards.label("Backwards");
 }
 
 void offset2Value(float v) {
   float newValue = (float)(Math.round(v));
   offset2Slider.value(newValue);
   updatePlayheadOffset(2, (int)newValue);
-  println(newValue);
+  offset2Slider.label(str((int)newValue));
 }
 
 void speed2Value(float v) {
@@ -185,15 +256,16 @@ void speed2Value(float v) {
   speed2Slider.value(newValue);
   updatePlayheadSpeed(2, newValue);
   speed2Slider.label(str(newValue));
-  println(newValue);
 }
 
 void togglePlayhead2() {
   enablePlayhead(2);  
   if(playheadManager.playheads[1].active) {
     playhead2Toggle.isPressed(true);
+    playhead2Toggle.label("Enabled");
   } else {
     playhead2Toggle.isPressed(false);
+    playhead2Toggle.label("");
   }
 }
 
@@ -202,24 +274,25 @@ void togglePlayhead2() {
 void direction3Forwards() {
   setPlayheadDirection(3,1);
   playhead3Forwards.deactivate();
-  playhead3Forwards.isPressed(true);
+  playhead3Forwards.label("Forwards");
   playhead3Backwards.isPressed(false);
   playhead3Backwards.activate();
+  playhead3Backwards.label("");
 }
 
 void direction3Backwards() {
   setPlayheadDirection(3,-1);
   playhead3Forwards.activate();
-  playhead3Forwards.isPressed(false);
-  playhead3Backwards.isPressed(true);
+  playhead3Forwards.label("");
   playhead3Backwards.deactivate();
+  playhead3Backwards.label("Backwards");
 }
 
 void offset3Value(float v) {
   float newValue = (float)(Math.round(v));
   offset3Slider.value(newValue);
   updatePlayheadOffset(3, (int)newValue);
-  println(newValue);
+  offset3Slider.label(str((int)newValue));
 }
 
 void speed3Value(float v) {
@@ -227,15 +300,60 @@ void speed3Value(float v) {
   speed3Slider.value(newValue);
   updatePlayheadSpeed(3, newValue);
   speed3Slider.label(str(newValue));
-  println(newValue);
 }
 
 void togglePlayhead3() {
   enablePlayhead(3);  
-  if(playheadManager.playheads[1].active) {
+  if(playheadManager.playheads[2].active) {
     playhead3Toggle.isPressed(true);
+    playhead3Toggle.label("Enabled");
   } else {
     playhead3Toggle.isPressed(false);
+    playhead3Toggle.label("");
+  }
+}
+
+// PUI interactions for Playhead 4
+
+void direction4Forwards() {
+  setPlayheadDirection(4,1);
+  playhead4Forwards.deactivate();
+  playhead4Forwards.label("Forwards");
+  playhead4Backwards.isPressed(false);
+  playhead4Backwards.activate();
+  playhead4Backwards.label("");
+}
+
+void direction4Backwards() {
+  setPlayheadDirection(4,-1);
+  playhead4Forwards.activate();
+  playhead4Forwards.label("");
+  playhead4Backwards.deactivate();
+  playhead4Backwards.label("Backwards");
+}
+
+void offset4Value(float v) {
+  float newValue = (float)(Math.round(v));
+  offset4Slider.value(newValue);
+  updatePlayheadOffset(4, (int)newValue);
+  offset4Slider.label(str((int)newValue));
+}
+
+void speed4Value(float v) {
+  float newValue = (float)(Math.floor(v/0.25)) * 0.25;  
+  speed4Slider.value(newValue);
+  updatePlayheadSpeed(4, newValue);
+  speed4Slider.label(str(newValue));
+}
+
+void togglePlayhead4() {
+  enablePlayhead(4);  
+  if(playheadManager.playheads[3].active) {
+    playhead4Toggle.isPressed(true);
+    playhead4Toggle.label("Enabled");
+  } else {
+    playhead4Toggle.isPressed(false);
+    playhead4Toggle.label("");
   }
 }
 
@@ -254,7 +372,7 @@ void mousePressed() {
 
 void keyPressed() {
   switch (key) {
-    case ' ':
+    case '3':
       if(playheadsVisible) {
         removePuiPlayheadsGroup();
         // pui.hide();
@@ -278,7 +396,6 @@ public void lengthButton(int theValue) {
   } else {
     scalesGroup.hide();
     saveLoadGroup.hide();
-    playheadsGroup.hide();
     lengthGroup.show();
     stave.startAlteringLength();
   }
@@ -288,7 +405,6 @@ public void scalesButton(int theValue) {
   if(scalesGroup.isVisible()) {
     scalesGroup.hide();
     saveLoadGroup.hide();
-    playheadsGroup.hide();
     stave.canEdit = true;
   } else {
     lengthGroup.hide();
@@ -309,7 +425,6 @@ public void saveLoadButton(int theValue) {
   } else {
     lengthGroup.hide();
     scalesGroup.hide();
-    playheadsGroup.hide();
     stave.stopAlteringLength();
     
     updateSaveLoadGroup();
@@ -318,21 +433,21 @@ public void saveLoadButton(int theValue) {
   }
 }
 
-public void playheadsButton(int theValue) {
-  if(playheadsGroup.isVisible()) {
-    playheadsGroup.hide();
-    stave.canEdit = true;
-  } else {
-    lengthGroup.hide();
-    scalesGroup.hide();
-    saveLoadGroup.hide();
-    stave.stopAlteringLength();
+// public void playheadsButton(int theValue) {
+//   if(playheadsGroup.isVisible()) {
+//     playheadsGroup.hide();
+//     stave.canEdit = true;
+//   } else {
+//     lengthGroup.hide();
+//     scalesGroup.hide();
+//     saveLoadGroup.hide();
+//     stave.stopAlteringLength();
     
-    updatePlayheadsGroup();
-    playheadsGroup.show();
-    stave.canEdit = false;
-  }
-}
+//     updatePlayheadsGroup();
+//     playheadsGroup.show();
+//     stave.canEdit = false;
+//   }
+// }
 
 
 
@@ -560,322 +675,6 @@ void createSaveLoadGroup() {
  * end save/load group
  */
 
-/* 
- *begin playheads group
- */
-
-
-void createPlayheadsGroup() {
-  playheadsGroup = cp5.addGroup("playheadsGroup")
-                   .setPosition(100,100)
-                   .hideArrow()
-                   .setCaptionLabel("Playheads")
-                   .disableCollapse()
-                   .setWidth(600)
-                   .setBackgroundHeight(300)
-                   .setBackgroundColor(color(0,128))
-                   .hide()
-                   ;
-
-  // varialbse for control positioning
-  int yOffset = 75;
-  int yControlSpacing = 60;
-  int controlWidth = 90;
-  int controlHeight = 30;
-
-  xOffset = 30;
-  titleOffset = xOffset+30;
-
-  // create controls for Playhead ONE
-  // these should probably be locked
-  cp5.addTextlabel("playheadOneLabel")
-     .setText("ONE")
-     .setPosition(titleOffset,30)
-     .setGroup(playheadsGroup)
-     ;
-
-  cp5.addToggle("togglePlayheadOneDirection")
-     .setBroadcast(false)
-     .setPosition(xOffset,yOffset)
-     .setSize(controlWidth,controlHeight)
-     .setValue(true)
-     .setState(false) // false is forwards
-     .setMode(ControlP5.SWITCH)
-     .setCaptionLabel("Direction")
-     .setLock(true)
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  cp5.getController("togglePlayheadOneDirection").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-
-  // create speed slider
-  cp5.addSlider("playheadOneSpeed")
-     .setBroadcast(false)
-     .setPosition(xOffset,yOffset + (1*yControlSpacing))
-     .setSize(controlWidth,controlHeight)
-     .setRange(0.25,4)
-     .setValue(1)
-     .setLock(true)
-     .setCaptionLabel("Speed")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  // cp5.getController("playheadOneSpeed").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  cp5.getController("playheadOneSpeed").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-  
-  // create speed slider
-  cp5.addSlider("playheadOneOffset")
-     .setBroadcast(false)
-     .setPosition(xOffset,yOffset + (2*yControlSpacing))
-     .setSize(controlWidth, controlHeight)
-     .setRange(0,400)
-     .setValue(0)
-     .setCaptionLabel("Offset")
-     .setLock(true)
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  // cp5.getController("playheadOneOffset").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  cp5.getController("playheadOneOffset").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-
-  // create enable toggle with label
-  cp5.addToggle("enablePlayheadOne")
-     .setBroadcast(false)
-     .setPosition(xOffset,245)
-     .setSize(controlWidth, 40)
-     .setValue(true)
-     .setState(true)
-     .setCaptionLabel("ENABLE")
-     .setLock(true)
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  cp5.getController("enablePlayheadOne").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingX(0);
-
-   // create controls for Playhead TWO
-
-  xOffset = 180;
-  titleOffset = xOffset+30;
-
-
-  cp5.addTextlabel("playheadTwoLabel")
-     .setText("TWO")
-     .setPosition(titleOffset,30)
-     .setGroup(playheadsGroup)
-     ;
-
-  // create backward button
-  // create forward button
-  cp5.addToggle("togglePlayheadTwoDirection")
-     .setBroadcast(false)
-     .setPosition(xOffset,yOffset)
-     .setSize(controlWidth,controlHeight)
-     .setValue(true)
-     .setState(false) // false is forwards
-     .setMode(ControlP5.SWITCH)
-     .setCaptionLabel("Direction")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  cp5.getController("togglePlayheadTwoDirection").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-
-  // create speed slider
-  cp5.addSlider("playheadTwoSpeed")
-     .setBroadcast(false)
-     .setPosition(xOffset,yOffset + (1*yControlSpacing))
-     .setSize(controlWidth,controlHeight)
-     .setRange(0.25,4)
-     .setValue(1)
-     .setCaptionLabel("Speed")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  // cp5.getController("playheadTwoSpeed").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  cp5.getController("playheadTwoSpeed").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-  
-  // create speed slider
-  cp5.addSlider("playheadTwoOffset")
-     .setBroadcast(false)
-     .setPosition(xOffset,yOffset + (2*yControlSpacing))
-     .setSize(controlWidth, controlHeight)
-     .setRange(0,400)
-     .setValue(0)
-     .setCaptionLabel("Offset")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  // cp5.getController("playheadTwoOffset").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  cp5.getController("playheadTwoOffset").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-
-  // create enable toggle with label
-  cp5.addToggle("enablePlayheadTwo")
-     .setBroadcast(false)
-     .setPosition(xOffset,245)
-     .setSize(controlWidth, 40)
-     .setValue(true)
-     .setState(false) // false is forwards
-     .setCaptionLabel("ENABLE")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  cp5.getController("enablePlayheadTwo").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingX(0);
-
-
-  // create controls for Playhead THREE
-
-  xOffset = 330;
-  titleOffset = xOffset+25;
-
-  cp5.addTextlabel("playheadThreeLabel")
-     .setText("THREE")
-     .setPosition(titleOffset,30)
-     .setGroup(playheadsGroup)
-     ;
-
-  // create backward button
-  // create forward button
-  cp5.addToggle("togglePlayheadThreeDirection")
-     .setBroadcast(false)
-     .setPosition(xOffset,yOffset)
-     .setSize(controlWidth,controlHeight)
-     .setValue(true)
-     .setState(false) // false is forwards
-     .setMode(ControlP5.SWITCH)
-     .setCaptionLabel("Direction")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  cp5.getController("togglePlayheadThreeDirection").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-
-  // create speed slider
-  cp5.addSlider("playheadThreeSpeed")
-     .setBroadcast(false)
-     .setPosition(xOffset,yOffset + (1*yControlSpacing))
-     .setSize(controlWidth,controlHeight)
-     .setRange(0.25,4)
-     .setValue(1)
-     .setCaptionLabel("Speed")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  // cp5.getController("playheadThreeSpeed").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  cp5.getController("playheadThreeSpeed").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-  
-  // create speed slider
-  cp5.addSlider("playheadThreeOffset")
-     .setBroadcast(false)
-     .setPosition(xOffset,yOffset + (2*yControlSpacing))
-     .setSize(controlWidth, controlHeight)
-     .setRange(0,400)
-     .setValue(0)
-     .setCaptionLabel("Offset")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  // cp5.getController("playheadThreeOffset").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  cp5.getController("playheadThreeOffset").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-
-  // create enable toggle with label
-  cp5.addToggle("enablePlayheadThree")
-     .setBroadcast(false)
-     .setPosition(xOffset,245)
-     .setSize(controlWidth, 40)
-     .setValue(true)
-     .setState(false) // false is forwards
-     .setCaptionLabel("ENABLE")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  cp5.getController("enablePlayheadThree").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingX(0);
-
-  // create controls for Playhead FOUR
-
-  xOffset = 480;
-  titleOffset = xOffset+30;
-
-  cp5.addTextlabel("playheadFourLabel")
-     .setText("FOUR")
-     .setPosition(titleOffset,30)
-     .setGroup(playheadsGroup)
-     ;
-
-  // create backward button
-  // create forward button
-  cp5.addToggle("togglePlayheadFourDirection")
-     .setBroadcast(false)
-     .setPosition(xOffset,yOffset)
-     .setSize(controlWidth,controlHeight)
-     .setValue(true)
-     .setState(false) // false is forwards
-     .setMode(ControlP5.SWITCH)
-     .setCaptionLabel("Direction")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  cp5.getController("togglePlayheadFourDirection").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-
-  // create speed slider
-  cp5.addSlider("playheadFourSpeed")
-     .setBroadcast(false)
-     .setPosition(xOffset,yOffset + (1*yControlSpacing))
-     .setSize(controlWidth,controlHeight)
-     .setRange(0.25,4)
-     .setValue(1)
-     .setCaptionLabel("Speed")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  // cp5.getController("playheadFourSpeed").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  cp5.getController("playheadFourSpeed").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-  
-  // create speed slider
-  cp5.addSlider("playheadFourOffset")
-     .setBroadcast(false)
-     .setPosition(xOffset,yOffset + (2*yControlSpacing))
-     .setSize(controlWidth, controlHeight)
-     .setRange(0,400)
-     .setValue(0)
-     .setCaptionLabel("Offset")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  // cp5.getController("playheadFourOffset").getValueLabel().align(ControlP5.LEFT, ControlP5.BOTTOM_OUTSIDE).setPaddingX(0);
-  cp5.getController("playheadFourOffset").getCaptionLabel().align(ControlP5.CENTER, ControlP5.TOP_OUTSIDE).setPaddingX(0);
-
-  // create enable toggle with label
-  cp5.addToggle("enablePlayheadFour")
-     .setBroadcast(false)
-     .setPosition(xOffset,245)
-     .setSize(controlWidth, 40)
-     .setValue(true)
-     .setState(false) // false is forwards
-     .setCaptionLabel("ENABLE")
-     .setBroadcast(true)
-     .setGroup(playheadsGroup)
-     ;
-
-  cp5.getController("enablePlayheadFour").getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER).setPaddingX(0);
-}
-
-/*
- * end playheads group
- */
-
 void updateScalesGroup() {
   String[] scaleButtons = {"C", "D", "E", "F", "G", "A", "B", "C#", "Eb", "F#", "Ab", "Bb"};
   for (int i = 0; i < scaleButtons.length; i++) {
@@ -913,42 +712,6 @@ void updateSaveLoadGroup() {
       cp5.getController(buttonName).setColorBackground(defaultBgColor);
     }
   } 
-}
-
-void updatePlayheadsGroup() {
-  String[] playheadNames = {"One", "Two", "Three", "Four"};
-
-  for(int i = 1; i < playheadManager.playheads.length; i++) {
-    int n = i + 1;
-    Playhead p = playheadManager.playheads[i];
-
-    String directionName = "togglePlayhead" + playheadNames[i] + "Direction";
-    String enabledName = "enablePlayhead" + playheadNames[i];
-    String offsetName = "playhead" + playheadNames[i] + "Offset";
-    String speedName = "playhead" + playheadNames[i] + "Speed";
-
-    // update direction
-    controlP5.Toggle tog = (controlP5.Toggle)cp5.getController(directionName);
-    if(p.directionOffset==1) {
-      tog.setBroadcast(false).setState(false).setBroadcast(true);
-    } else {
-      tog.setBroadcast(false).setState(true).setBroadcast(true);
-    }
-    // update enabled
-    controlP5.Toggle but = (controlP5.Toggle)cp5.getController(enabledName);
-    if(p.active) {
-      but.setBroadcast(false).setState(true).setBroadcast(true);
-    } else {
-      but.setBroadcast(false).setState(false).setBroadcast(true);
-    }
-    // update offset if it's not the same
-    controlP5.Slider s1 = (controlP5.Slider)cp5.getController(offsetName);
-    s1.setBroadcast(false).setValue(p.offset).setBroadcast(true);
-    // update speed if it's not the same
-    controlP5.Slider s2 = (controlP5.Slider)cp5.getController(speedName);
-    s2.setBroadcast(false).setValue(p.speed).setBroadcast(true);
-  }
-  
 }
 
 void controlEvent(ControlEvent theEvent) {
@@ -1066,75 +829,6 @@ void controlEvent(ControlEvent theEvent) {
     case "load8But":
       loadTune("data/8.xml");
       break;
-
-    // playheads
-
-    // SPEED
-    case "playheadOneSpeed":
-      s = theEvent.getController().getValue();
-      updatePlayheadSpeed(1, s);
-      break;
-    case "playheadTwoSpeed":
-      s = theEvent.getController().getValue();
-      updatePlayheadSpeed(2, s);
-      break;
-    case "playheadThreeSpeed":
-      s = theEvent.getController().getValue();
-      updatePlayheadSpeed(3, s);
-      break;
-    case "playheadFourSpeed":
-      s = theEvent.getController().getValue();
-      updatePlayheadSpeed(4, s);
-      break;
-
-
-    // OFFSET
-    case "playheadOneOffset":
-      o = (int)(theEvent.getController().getValue());
-      updatePlayheadOffset(1, o);
-      break;
-    case "playheadTwoOffset":
-      o = (int)(theEvent.getController().getValue());
-      updatePlayheadOffset(2, o);
-      break;
-    case "playheadThreeOffset":
-      o = (int)(theEvent.getController().getValue());
-      updatePlayheadOffset(3, o);
-      break;
-    case "playheadFourOffset":
-      o = (int)(theEvent.getController().getValue());
-      updatePlayheadOffset(4, o);
-      break;
-
-
-
-    // DIRECTION
-    case "togglePlayheadOneDirection":
-      togglePlayheadDirection(1);
-      break;
-    case "togglePlayheadTwoDirection":
-      togglePlayheadDirection(2);
-      break;
-    case "togglePlayheadThreeDirection":
-      togglePlayheadDirection(3);
-      break;
-    case "togglePlayheadFourDirection":
-      togglePlayheadDirection(4);
-      break;
-
-    //enable
-    case "enablePlayheadOne":
-      enablePlayhead(1);
-      break;
-    case "enablePlayheadTwo":
-      enablePlayhead(2);
-      break;
-    case "enablePlayheadThree":
-      enablePlayhead(3);
-      break;
-    case "enablePlayheadFour":
-      enablePlayhead(4);
-      break;
   }
 }
 
@@ -1150,7 +844,6 @@ void loadTune(String filename) {
   tuneXml = loadXML(filename);
   store.xmlToTune(tuneXml);
   updateScalesGroup();
-  updatePlayheadsGroup();
 }
 
 void deselectAllScaleButtons() {
@@ -1209,7 +902,6 @@ void enablePlayhead(int pN) {
   } else {
     p.activate();
   }
-  updatePlayheadsGroup();
 }
 
 void togglePlayheadDirection(int pN) {
@@ -1223,7 +915,6 @@ void togglePlayheadDirection(int pN) {
     p.directionOffset = 1;
     p.direction = 1 - p.direction;
   }
-  updatePlayheadsGroup();
 }
 
 void setPlayheadDirection(int pN, int dirOff) {
@@ -1248,8 +939,6 @@ void updatePlayheadOffset(int pN, int off) {
   p.changeOffset(off, playheadManager.playheads[0].position);
 
   println("Playhead offset is now ", p.offset);
-
-  updatePlayheadsGroup();
 }
 
 void updatePlayheadSpeed(int pN, float s) {
@@ -1258,8 +947,6 @@ void updatePlayheadSpeed(int pN, float s) {
   Playhead p = playheadManager.playheads[index];
 
   p.speed = s;
-
-  updatePlayheadsGroup();
 }
 
 void createBottomButtons() {
