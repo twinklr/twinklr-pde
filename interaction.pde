@@ -4,6 +4,7 @@ ControlP5 cp5;
 ControllerGroup lengthGroup;
 ControllerGroup scalesGroup;
 ControllerGroup saveLoadGroup;
+BottomButton[] bottomButtons = new BottomButton[5];
 
 Storage store;
 XML tuneXml;
@@ -39,17 +40,19 @@ boolean playheadsMenuVisible = false;
 boolean lengthMenuVisible = false;
 
 void createPuiLengthGroup() {
+  lengthMenuVisible = true;
   stave.canEdit = false;
   stave.startAlteringLength();
 
   pui = PUI.init(this).size(276, height-40).theme("Grayday");
   pui.padding(0.25, 0.5); // set padding (in grid units)
-  // pui.font("NewMedia Fett.ttf"); // set font
+  pui.font("deja.ttf"); // set font
 
   pui.addLabel("Change Stave Length").large();
   pui.newRow();
-  pui.addLabel("Drag the orange marker to create a loop.");
-   pui.addButton().label("Done").size(16,5).calls("removePuiLengthGroup");
+  pui.addLabel("Drag the orange marker to"); 
+  pui.addLabel("create a loop.");
+  pui.addButton().label("DONE").size(16,5).calls("removePuiLengthGroup");
 }
 
 void removePuiLengthGroup() {
@@ -64,7 +67,7 @@ void createPuiPlayheadsGroup() {
 
   pui = PUI.init(this).size(710, height-40).theme("Grayday");
   pui.padding(0.25, 0.5); // set padding (in grid units)
-  // pui.font("NewMedia Fett.ttf"); // set font
+  pui.font("deja.ttf"); // set font
 
   // make controls for Playhead One
 
@@ -78,7 +81,7 @@ void createPuiPlayheadsGroup() {
 
   playhead1Backwards = pui.addButton().size(5,4).noLabel().calls("direction1Backwards").isPressed(false).deactivate();
   playhead1Forwards = pui.addButton().size(5,4).noLabel().calls("direction1Forwards").isPressed(true).deactivate();
-  playhead1Forwards.label("Forwards");
+  playhead1Forwards.label("FORWARDS");
 
   pui.newRow();
   pui.addLabel("Offset").medium();
@@ -96,7 +99,7 @@ void createPuiPlayheadsGroup() {
 
   pui.newRow();
 
-  playhead1Toggle = pui.addButton().label("Enabled").size(16,5).isPressed(true).deactivate();
+  playhead1Toggle = pui.addButton().label("ENABLED").size(16,5).isPressed(true).deactivate();
   
   // make controls for Playhead Two
 
@@ -138,7 +141,7 @@ void createPuiPlayheadsGroup() {
 
   playhead2Toggle = pui.addButton().noLabel().size(16,5).calls("togglePlayhead2");
   if(playheadManager.playheads[1].active) {
-    playhead2Toggle.label("Enabled");  
+    playhead2Toggle.label("ENABLED");  
   } else {
     playhead2Toggle.label("");
   }
@@ -185,7 +188,7 @@ void createPuiPlayheadsGroup() {
 
   playhead3Toggle = pui.addButton().noLabel().size(16,5).calls("togglePlayhead3");
   if(playheadManager.playheads[2].active) {
-    playhead3Toggle.label("Enabled");  
+    playhead3Toggle.label("ENABLED");  
   } else {
     playhead3Toggle.label("");
   }
@@ -232,7 +235,7 @@ void createPuiPlayheadsGroup() {
   playhead4Toggle.isPressed(playheadManager.playheads[3].active);
 
   if(playheadManager.playheads[3].active) {
-    playhead4Toggle.label("Enabled");  
+    playhead4Toggle.label("ENABLED");  
   } else {
     playhead4Toggle.label("");
   }
@@ -253,7 +256,7 @@ void removePuiPlayheadsGroup() {
 void direction2Forwards() {
   setPlayheadDirection(2,1);
   playhead2Forwards.deactivate();
-  playhead2Forwards.label("Forwards");
+  playhead2Forwards.label("FORWARDS");
   playhead2Backwards.isPressed(false);
   playhead2Backwards.activate();
   playhead2Backwards.label("");
@@ -264,7 +267,7 @@ void direction2Backwards() {
   playhead2Forwards.activate();
   playhead2Forwards.label("");
   playhead2Backwards.deactivate();
-  playhead2Backwards.label("Backwards");
+  playhead2Backwards.label("BACKWARDS");
 }
 
 void offset2Value(float v) {
@@ -285,7 +288,7 @@ void togglePlayhead2() {
   enablePlayhead(2);  
   if(playheadManager.playheads[1].active) {
     playhead2Toggle.isPressed(true);
-    playhead2Toggle.label("Enabled");
+    playhead2Toggle.label("ENABLED");
   } else {
     playhead2Toggle.isPressed(false);
     playhead2Toggle.label("");
@@ -297,7 +300,7 @@ void togglePlayhead2() {
 void direction3Forwards() {
   setPlayheadDirection(3,1);
   playhead3Forwards.deactivate();
-  playhead3Forwards.label("Forwards");
+  playhead3Forwards.label("FORWARDS");
   playhead3Backwards.isPressed(false);
   playhead3Backwards.activate();
   playhead3Backwards.label("");
@@ -308,7 +311,7 @@ void direction3Backwards() {
   playhead3Forwards.activate();
   playhead3Forwards.label("");
   playhead3Backwards.deactivate();
-  playhead3Backwards.label("Backwards");
+  playhead3Backwards.label("BACKWARDS");
 }
 
 void offset3Value(float v) {
@@ -329,7 +332,7 @@ void togglePlayhead3() {
   enablePlayhead(3);  
   if(playheadManager.playheads[2].active) {
     playhead3Toggle.isPressed(true);
-    playhead3Toggle.label("Enabled");
+    playhead3Toggle.label("ENABLED");
   } else {
     playhead3Toggle.isPressed(false);
     playhead3Toggle.label("");
@@ -341,7 +344,7 @@ void togglePlayhead3() {
 void direction4Forwards() {
   setPlayheadDirection(4,1);
   playhead4Forwards.deactivate();
-  playhead4Forwards.label("Forwards");
+  playhead4Forwards.label("FORWARDS");
   playhead4Backwards.isPressed(false);
   playhead4Backwards.activate();
   playhead4Backwards.label("");
@@ -352,7 +355,7 @@ void direction4Backwards() {
   playhead4Forwards.activate();
   playhead4Forwards.label("");
   playhead4Backwards.deactivate();
-  playhead4Backwards.label("Backwards");
+  playhead4Backwards.label("BACKWARDS");
 }
 
 void offset4Value(float v) {
@@ -373,7 +376,7 @@ void togglePlayhead4() {
   enablePlayhead(4);  
   if(playheadManager.playheads[3].active) {
     playhead4Toggle.isPressed(true);
-    playhead4Toggle.label("Enabled");
+    playhead4Toggle.label("ENABLED");
   } else {
     playhead4Toggle.isPressed(false);
     playhead4Toggle.label("");
@@ -390,6 +393,13 @@ void mouseDragged() {
 void mousePressed() {
   if(stave.insideStave(mouseX,mouseY)) {
     stave.click(mouseX, mouseY);
+  }
+
+  for (int i = 0; i < bottomButtons.length; i++ ) {
+     if (mouseX > bottomButtons[i].x && mouseX < bottomButtons[i].x+bottomButtons[i].buttonWidth && 
+      mouseY > bottomButtons[i].y && mouseY < bottomButtons[i].y + bottomButtons[i].buttonHeight) {
+      bottomButtons[i].click();
+    }
   }
 }
 
@@ -969,53 +979,14 @@ void updatePlayheadSpeed(int pN, float s) {
 }
 
 void createBottomButtons() {
-  controlP5.Button lengthButton = cp5.addButton("lengthButton")
-                            .setBroadcast(false)
-                            .setValue(1)
-                            .setPosition(0,440)
-                            .setSize(159,40)
-                            .setBroadcast(true)
-                            ;
-
-  lengthButton.setCaptionLabel("Length");
-
-  controlP5.Button scalesButton = cp5.addButton("scalesButton")
-                           .setBroadcast(false)
-                           .setValue(2)
-                           .setPosition(160,440)
-                           .setSize(159,40)
-                           .setBroadcast(true)
-                           ;
-
-  scalesButton.setCaptionLabel("Scales");
-
-  controlP5.Button playheadsButton = cp5.addButton("playheadsButton")
-                           .setBroadcast(false)
-                           .setValue(3)
-                           .setPosition(320,440)
-                           .setSize(159,40)
-                           .setBroadcast(true)
-                           ;
-
-  playheadsButton.setCaptionLabel("Playheads");
-
-  controlP5.Button midiButton = cp5.addButton("midiButton")
-                         .setBroadcast(false)
-                         .setValue(4)
-                         .setPosition(480,440)
-                         .setSize(159,40)
-                         .setBroadcast(true)
-                        ;
-
-  midiButton.setCaptionLabel("MIDI");
-
-  controlP5.Button saveLoadButton = cp5.addButton("saveLoadButton")
-                             .setBroadcast(false)
-                             .setValue(5)
-                             .setPosition(640,440)
-                             .setSize(160,40)
-                             .setBroadcast(true)
-                             ;
-
-  saveLoadButton.setCaptionLabel("Save / Load");
+  // create length button
+  // create scalesbutton
+  // create playheadsbutton
+  // create midi button
+  // create saveload button
+  bottomButtons[0] = new BottomButton(0,159,"LENGTH",1, this);
+  bottomButtons[1] = new BottomButton(160,159,"SCALES",2, this);
+  bottomButtons[2] = new BottomButton(320,159,"PLAYHEADS",3, this);
+  bottomButtons[3] = new BottomButton(480,159,"MIDI",4, this);
+  bottomButtons[4] = new BottomButton(640,160,"SAVE / LOAD",5, this);
 }
