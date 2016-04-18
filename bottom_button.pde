@@ -29,6 +29,12 @@ class BottomButton {
     handle(buttonNumber);
   }
 
+  void deselectAll() {
+    for (int i = 0; i < bottomButtons.length; i++ ) {
+      bottomButtons[i].selected = false;   
+    }
+  }
+
   void render() {
     int regularColor = color(85,91,93);
     int selectedColor = color(163,181,187);
@@ -64,6 +70,8 @@ class BottomButton {
         } else {
           removePuiPlayheadsGroup();
           removePuiScalesGroup();
+          removePuiSaveGroup();
+          removePuiLoadGroup();
           createPuiLengthGroup();
         }
         break;
@@ -75,6 +83,8 @@ class BottomButton {
         } else {
           removePuiPlayheadsGroup();
           removePuiLengthGroup();
+          removePuiSaveGroup();
+          removePuiLoadGroup();
           createPuiScalesGroup();
         }
         break;
@@ -86,6 +96,8 @@ class BottomButton {
         } else {
           removePuiLengthGroup();
           removePuiScalesGroup();
+          removePuiSaveGroup();
+          removePuiLoadGroup();
           createPuiPlayheadsGroup();
         }
         break;
@@ -94,9 +106,29 @@ class BottomButton {
         break;
       case 5:
         // save
+        if(saveMenuVisible) {
+          removePuiSaveGroup();
+          // pui.hide();
+        } else {
+          removePuiLengthGroup();
+          removePuiScalesGroup();
+          removePuiPlayheadsGroup();
+          removePuiLoadGroup();
+          createPuiSaveGroup();
+        }
         break;
       case 6:
         // load
+        if(loadMenuVisible) {
+          removePuiLoadGroup();
+          // pui.hide();
+        } else {
+          removePuiLengthGroup();
+          removePuiScalesGroup();
+          removePuiPlayheadsGroup();
+          removePuiSaveGroup();
+          createPuiLoadGroup();
+        }
         break;
     }
   }

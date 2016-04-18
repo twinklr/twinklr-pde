@@ -1,7 +1,5 @@
 import com.martinleopold.pui.*;
 
-ControlP5 cp5;
-ControllerGroup saveLoadGroup;
 BottomButton[] bottomButtons = new BottomButton[6];
 
 Storage store;
@@ -19,13 +17,9 @@ int o;
 PUI pui;
 
 void setupGui() {
-  cp5 = new ControlP5(this);
   pui = PUI.init(this).size(300, 300).hide();
 
   createBottomButtons();
-
-  createSaveLoadGroup();
-  updateSaveLoadGroup();
 }
 
 com.martinleopold.pui.Slider speed1Slider, offset1Slider, speed2Slider, offset2Slider, speed3Slider, offset3Slider, speed4Slider, offset4Slider;
@@ -35,6 +29,8 @@ com.martinleopold.pui.Label scalesTitle;
 boolean playheadsMenuVisible = false;
 boolean lengthMenuVisible = false;
 boolean scalesMenuVisible = false;
+boolean saveMenuVisible = false;
+boolean loadMenuVisible = false;
 
 void createPuiLengthGroup() {
   lengthMenuVisible = true;
@@ -458,6 +454,106 @@ void createPuiScalesGroup() {
   }
 }
 
+// PUI Save Load interactions
+
+void createPuiSaveGroup() {
+  saveMenuVisible = true;
+  stave.canEdit = false;
+
+  pui = PUI.init(this).size(170, height-40).theme("Grayday");
+  pui.padding(1, 0.5); // set padding (in grid units)
+  pui.font("deja.ttf"); // set font
+  // pui.toggleGrid();
+
+  pui.addLabel("Save").large();
+  pui.addDivider();
+
+  int startX, startY, colSpacing;
+  startX = 2;
+  startY = 6;
+  colSpacing = 8;
+
+  // create Save Buttons
+  for (int i = 0; i < 4; i++) {
+    String buttonName = "save" + (i+1) + "But";
+    com.martinleopold.pui.Button b = pui.addButton().label(str(i+1)).size(5,5).calls(buttonName);
+    b.position(startX, startY + (i*colSpacing));
+    File f = new File(dataPath(str(i+1) + ".xml"));
+    if(f.exists()) {
+      b.label(str(i+1));
+    } else {
+      b.label(str(i+1) + " (EMPTY)");
+    }
+  }  
+  for (int i = 4; i < 8; i++) {
+    String buttonName = "save" + (i+1) + "But";
+    com.martinleopold.pui.Button b = pui.addButton().label(str(i+1)).size(5,5).calls(buttonName);
+    b.position(startX+colSpacing, startY + ((i-4)*colSpacing));
+    File f = new File(dataPath(str(i+1) + ".xml"));
+    if(f.exists()) {
+      b.label(str(i+1));
+    } else {
+      b.label(str(i+1) + " (EMPTY)");
+    }
+  }  
+}
+
+void removePuiSaveGroup() {
+  pui.hide();
+  saveMenuVisible = false;
+  stave.canEdit = true; 
+}
+
+void createPuiLoadGroup() {
+  loadMenuVisible = true;
+  stave.canEdit = false;
+
+  pui = PUI.init(this).size(170, height-40).theme("Grayday");
+  pui.padding(1, 0.5); // set padding (in grid units)
+  pui.font("deja.ttf"); // set font
+  // pui.toggleGrid();
+
+  pui.addLabel("Load").large();
+  pui.addDivider();
+
+  int startX, startY, colSpacing;
+  startX = 2;
+  startY = 6;
+  colSpacing = 8;
+
+  // create Load Buttons
+  for (int i = 0; i < 4; i++) {
+    String buttonName = "load" + (i+1) + "But";
+    com.martinleopold.pui.Button b = pui.addButton().label(str(i+1)).size(5,5).calls(buttonName);
+    b.position(startX, startY + (i*colSpacing));
+    File f = new File(dataPath(str(i+1) + ".xml"));
+    if(f.exists()) {
+      b.label(str(i+1));
+    } else {
+      b.label(str(i+1) + " (EMPTY)");
+      b.deactivate();
+    }
+  }  
+  for (int i = 4; i < 8; i++) {
+    String buttonName = "load" + (i+1) + "But";
+    com.martinleopold.pui.Button b = pui.addButton().label(str(i+1)).size(5,5).calls(buttonName);
+    b.position(startX+colSpacing, startY + ((i-4)*colSpacing));
+    File f = new File(dataPath(str(i+1) + ".xml"));
+    if(f.exists()) {
+      b.label(str(i+1));
+    } else {
+      b.label(str(i+1) + " (EMPTY)");
+      b.deactivate();
+    }
+  }  
+}
+
+void removePuiLoadGroup() {
+  pui.hide();
+  loadMenuVisible = false;
+  stave.canEdit = true; 
+}
+
 // Mouse Interactions
 
 void mouseDragged() {
@@ -507,150 +603,13 @@ void mouseWheel(MouseEvent event) {
   playheadManager.modifyPositionBy(e);
 }
 
-public void saveLoadButton(int theValue) {
-  if(saveLoadGroup.isVisible()) {
-    saveLoadGroup.hide();
-    stave.canEdit = true;
-  } else {
-    updateSaveLoadGroup();
-    saveLoadGroup.show();
-    stave.canEdit = false;
-  }
-}
-
-// public void playheadsButton(int theValue) {
-//   if(playheadsGroup.isVisible()) {
-//     playheadsGroup.hide();
-//     stave.canEdit = true;
-//   } else {
-//     saveLoadGroup.hide();
-//     stave.stopAlteringLength();
-    
-//     updatePlayheadsGroup();
-//     playheadsGroup.show();
-//     stave.canEdit = false;
-//   }
-// }
-
-
-
-public void closeSaveLoadButton() {
-  saveLoadGroup.hide();
-  stave.canEdit = true;
-}
-
 public void resetButton() {
   soundbox.reset();
   stave.reset();
 }
 
-/*
- * Begin saveLoad group
- */
-
-void createSaveLoadGroup() {
-  saveLoadGroup = cp5.addGroup("saveLoadGroup")
-                   .setPosition(100,100)
-                   .hideArrow()
-                   .setCaptionLabel("Save / Load")
-                   .disableCollapse()
-                   .setWidth(600)
-                   .setBackgroundHeight(300)
-                   .setBackgroundColor(color(0,128))
-                   .hide()
-                   ;
-
-  // create SAVE header
-  cp5.addTextlabel("saveLabel")
-     .setText("SAVE")
-     .setPosition(125,50)
-     .setGroup(saveLoadGroup)
-     ;
-
-  // create Save Buttons
-  for (int i = 0; i < 8; i++) {
-    String buttonName = "save" + (i+1) + "But";
-    int yPos = 100;
-    int xIndex = i;
-    if(i > 3) {
-      yPos = 170;
-      xIndex = i - 4;
-    }
-    controlP5.Button but = cp5.addButton(buttonName).setBroadcast(false)
-     .setPosition((25 + (xIndex*60)),yPos)
-     .setSize(50,50)
-     .setGroup(saveLoadGroup)
-     .setCaptionLabel(str(i+1))
-     .setBroadcast(true)
-    ;
-
-    but.getCaptionLabel().setSize(12);
-  }
-
-  // create LOAD header
-  cp5.addTextlabel("loadLabel")
-     .setText("LOAD")
-     .setPosition(425,50)
-     .setGroup(saveLoadGroup)
-     ;
-
-  // create Load Buttons
-  for (int i = 0; i < 8; i++) {
-    String buttonName = "load" + (i+1) + "But";
-    int yPos = 100;
-    int xIndex = i;
-    if(i > 3) {
-      yPos = 170;
-      xIndex = i - 4;
-    }
-    controlP5.Button but = cp5.addButton(buttonName).setBroadcast(false)
-     .setPosition((300 + 25 + (xIndex*60)),yPos)
-     .setSize(50,50)
-     .setGroup(saveLoadGroup)
-     .setCaptionLabel(str(i+1))
-     .setBroadcast(true)
-    ;
-
-    but.getCaptionLabel().setSize(12);
-  }
-
-  // button to close without loading
-  cp5.addButton("closeSaveLoadButton").setBroadcast(false)
-     .setPosition(210,250)
-     .setSize(180,40)
-     .setGroup(saveLoadGroup)
-     .setCaptionLabel("Close")
-     .setBroadcast(true)
-     ;
-
-  cp5.addButton("resetButton").setBroadcast(false)
-     .setPosition(495,250)
-     .setSize(60,40)
-     .setGroup(saveLoadGroup)
-     .setCaptionLabel("Reset")
-     .setBroadcast(true)
-     ;
-}
-
-/*
- * end save/load group
- */
-
 void updateScalesTitle() {
   scalesTitle = scalesTitle.text("Current Scale: " + soundbox.currentScaleName()).large();
-}
-
-void updateSaveLoadGroup() {
-  for (int i = 0; i < 8; i++) {
-    File f = new File(dataPath(str(i+1) + ".xml"));
-    String buttonName = "load" + (i+1) + "But";
-
-    if (f.exists()) {
-      cp5.getController(buttonName).setColorBackground(highlightColor);
-    } else {
-      cp5.getController(buttonName).setColorBackground(defaultBgColor);
-    }
-  } 
 }
 
 // begin scale root selection
@@ -726,73 +685,74 @@ void scaleTypebluesBut() {
 
 // end scale type selection
 
+// begin save/load buttons
 
-void controlEvent(ControlEvent theEvent) {
-  String name = theEvent.getName();
-  switch(name) {
-    case "save1But":
-      saveTune("data/1.xml");
-      break;
-    case "save2But":
-      saveTune("data/2.xml");
-      break;
-    case "save3But":
-      saveTune("data/3.xml");
-      break;
-    case "save4But":
-      saveTune("data/4.xml");
-      break;
-    case "save5But":
-      saveTune("data/5.xml");
-      break;
-    case "save6But":
-      saveTune("data/6.xml");
-      break;
-    case "save7But":
-      saveTune("data/7.xml");
-      break;
-    case "save8But":
-      saveTune("data/8.xml");
-      break;
-
-    case "load1But":
-      loadTune("data/1.xml");
-      break;
-    case "load2But":
-      loadTune("data/2.xml");
-      break;
-    case "load3But":
-      loadTune("data/3.xml");
-      break;
-    case "load4But":
-      loadTune("data/4.xml");
-      break;
-    case "load5But":
-      loadTune("data/5.xml");
-      break;
-    case "load6But":
-      loadTune("data/6.xml");
-      break;
-    case "load7But":
-      loadTune("data/7.xml");
-      break;
-    case "load8But":
-      loadTune("data/8.xml");
-      break;
-  }
+void save1But(){
+  saveTune("data/1.xml");
 }
+void save2But(){
+  saveTune("data/2.xml");
+}
+void save3But(){
+  saveTune("data/3.xml");
+}
+void save4But(){
+  saveTune("data/4.xml");
+}
+void save5But(){
+  saveTune("data/5.xml");
+}
+void save6But(){
+  saveTune("data/6.xml");
+}
+void save7But(){
+  saveTune("data/7.xml");
+}
+void save8But(){
+  saveTune("data/8.xml");
+}
+
+void load1But(){
+  loadTune("data/1.xml");
+}
+void load2But(){
+  loadTune("data/2.xml");
+}
+void load3But(){
+  loadTune("data/3.xml");
+}
+void load4But(){
+  loadTune("data/4.xml");
+}
+void load5But(){
+  loadTune("data/5.xml");
+}
+void load6But(){
+  loadTune("data/6.xml");
+}
+void load7But(){
+  loadTune("data/7.xml");
+}
+void load8But(){
+  loadTune("data/8.xml");
+}
+
+// end save/load buttons
 
 void saveTune(String filename) {
   store = new Storage(stave,soundbox);
   tuneXml = store.tuneToXml();
   saveXML(tuneXml, filename);
-  updateSaveLoadGroup();
+  removePuiSaveGroup();
+  bottomButtons[0].deselectAll();
 }
 
 void loadTune(String filename) {
   store = new Storage(stave,soundbox);
   tuneXml = loadXML(filename);
   store.xmlToTune(tuneXml);
+  removePuiLoadGroup();
+  bottomButtons[0].deselectAll();
 }
 
 void selectScaleButton(String shortName) {

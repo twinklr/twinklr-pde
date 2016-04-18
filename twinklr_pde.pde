@@ -1,5 +1,4 @@
 import de.looksgood.ani.*;
-import controlP5.*;
 // import processing.io.*;
 
 Stave stave;
