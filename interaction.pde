@@ -4,7 +4,7 @@ ControlP5 cp5;
 ControllerGroup lengthGroup;
 ControllerGroup scalesGroup;
 ControllerGroup saveLoadGroup;
-BottomButton[] bottomButtons = new BottomButton[5];
+BottomButton[] bottomButtons = new BottomButton[6];
 
 Storage store;
 XML tuneXml;
@@ -35,9 +35,11 @@ void setupGui() {
 
 com.martinleopold.pui.Slider speed1Slider, offset1Slider, speed2Slider, offset2Slider, speed3Slider, offset3Slider, speed4Slider, offset4Slider;
 com.martinleopold.pui.Button playhead1Backwards, playhead1Forwards, playhead1Toggle, playhead2Backwards, playhead2Forwards, playhead2Toggle, playhead3Backwards, playhead3Forwards, playhead3Toggle, playhead4Backwards, playhead4Forwards, playhead4Toggle;
+com.martinleopold.pui.Label scalesTitle;
 
 boolean playheadsMenuVisible = false;
 boolean lengthMenuVisible = false;
+boolean scalesMenuVisible = false;
 
 void createPuiLengthGroup() {
   lengthMenuVisible = true;
@@ -383,6 +385,43 @@ void togglePlayhead4() {
   }
 }
 
+// PUI Scales Interactions
+
+void removePuiScalesGroup() {
+  scalesMenuVisible = false;
+  pui.hide();
+  stave.canEdit = true;
+}
+
+void createPuiScalesGroup() {
+  scalesMenuVisible = true;
+  stave.canEdit = false;
+
+  pui = PUI.init(this).size(660, height-40).theme("Grayday");
+  // pui.toggleGrid();
+  pui.padding(0.25, 0.5); // set padding (in grid units)
+  pui.font("deja.ttf"); // set font
+
+  scalesTitle = pui.addLabel("");
+  updateScalesTitle();
+
+  pui.newRow();
+
+  pui.columnWidth(100);
+  pui.padding(1,1);
+
+
+  String[] scaleTypes = { "major", "minor", "dorian", "lydian", "mixolydian", "phrygian", "locrian", "pentatonic", "blues"};
+
+  for (int i = 0; i < scaleTypes.length; i++) {
+    String buttonName = "scaleType" + scaleTypes[i] + "But";
+
+    pui.addButton().label(scaleTypes[i].toUpperCase()).size(5,5).calls(buttonName);
+  }
+}
+
+// Mouse Interactions
+
 void mouseDragged() {
   if(stave.alteringLength) {
     stave.updateWidthFromAbs(mouseX);
@@ -704,6 +743,10 @@ void createSaveLoadGroup() {
  * end save/load group
  */
 
+void updateScalesTitle() {
+  scalesTitle = scalesTitle.text("Current Scale: " + soundbox.currentScaleName()).large();
+}
+
 void updateScalesGroup() {
   String[] scaleButtons = {"C", "D", "E", "F", "G", "A", "B", "C#", "Eb", "F#", "Ab", "Bb"};
   for (int i = 0; i < scaleButtons.length; i++) {
@@ -743,6 +786,39 @@ void updateSaveLoadGroup() {
   } 
 }
 
+// begin scale type selection
+
+void scaleTypemajorBut() {
+  selectScaleTypeButton("major");
+}
+void scaleTypeminorBut() {
+  selectScaleTypeButton("minor");
+}
+void scaleTypedorianBut() {
+  selectScaleTypeButton("dorian");
+}
+void scaleTypelydianBut() {
+  selectScaleTypeButton("lydian");
+}
+void scaleTypemixolydianBut() {
+  selectScaleTypeButton("mixolydian");
+}
+void scaleTypephrygianBut() {
+  selectScaleTypeButton("phrygian");
+}
+void scaleTypelocrianBut() {
+  selectScaleTypeButton("locrian");
+}
+void scaleTypepentatonicBut() {
+  selectScaleTypeButton("pentatonic");
+}
+void scaleTypebluesBut() {
+  selectScaleTypeButton("blues");
+}
+
+// end scale type selection
+
+
 void controlEvent(ControlEvent theEvent) {
   String name = theEvent.getName();
   switch(name) {
@@ -781,33 +857,6 @@ void controlEvent(ControlEvent theEvent) {
       break;
     case "scaleBBut":
       selectScaleButton(name);
-      break;
-    case "scaleTypemajorBut":
-      selectScaleTypeButton(name);
-      break;
-    case "scaleTypeminorBut":
-      selectScaleTypeButton(name);
-      break;
-    case "scaleTypedorianBut":
-      selectScaleTypeButton(name);
-      break;
-    case "scaleTypelydianBut":
-      selectScaleTypeButton(name);
-      break;
-    case "scaleTypemixolydianBut":
-      selectScaleTypeButton(name);
-      break;
-    case "scaleTypephrygianBut":
-      selectScaleTypeButton(name);
-      break;
-    case "scaleTypelocrianBut":
-      selectScaleTypeButton(name);
-      break;
-    case "scaleTypepentatonicBut":
-      selectScaleTypeButton(name);
-      break;
-    case "scaleTypebluesBut":
-      selectScaleTypeButton(name);
       break;
     case "save1But":
       saveTune("data/1.xml");
@@ -909,17 +958,11 @@ void selectScaleButton(String scaleButtonName) {
   updateScalesGroup();
 }
 
-void selectScaleTypeButton(String scaleTypeButtonName) {
-  controlP5.Controller but = cp5.getController(scaleTypeButtonName);
-  // deselect all Buttons
-  deselectAllScaleTypeButtons();
-  // select this Button
-  but.setColorBackground(highlightColor);
-
-  String scaleType = scaleTypeButtonName.replace("scaleType", "").replace("But", "");
+void selectScaleTypeButton(String scaleType) {
+  println("Updating scales title to ", scaleType);
 
   soundbox.scaleType = scaleType;
-  updateScalesGroup();
+  updateScalesTitle();
 }
 
 void enablePlayhead(int pN) {
@@ -988,5 +1031,6 @@ void createBottomButtons() {
   bottomButtons[1] = new BottomButton(160,159,"SCALES",2, this);
   bottomButtons[2] = new BottomButton(320,159,"PLAYHEADS",3, this);
   bottomButtons[3] = new BottomButton(480,159,"MIDI",4, this);
-  bottomButtons[4] = new BottomButton(640,160,"SAVE / LOAD",5, this);
+  bottomButtons[4] = new BottomButton(640,79,"SAVE",5, this);
+  bottomButtons[5] = new BottomButton(720,80,"LOAD",6, this);
 }

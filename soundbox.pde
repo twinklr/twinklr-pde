@@ -148,7 +148,10 @@ class Soundbox {
       default:
         return norm;
     }
+  }
 
+  String currentScaleName() {
+    return scaleRoot.toUpperCase() + " " + scaleType;
   }
 
   void cycleRoot() {

@@ -63,11 +63,20 @@ class BottomButton {
           // pui.hide();
         } else {
           removePuiPlayheadsGroup();
+          removePuiScalesGroup();
           createPuiLengthGroup();
         }
         break;
       case 2:
         // scales;
+        if(scalesMenuVisible) {
+          removePuiScalesGroup();
+          // pui.hide();
+        } else {
+          removePuiPlayheadsGroup();
+          removePuiLengthGroup();
+          createPuiScalesGroup();
+        }
         break;
       case 3:
         // playheads
@@ -76,6 +85,7 @@ class BottomButton {
           // pui.hide();
         } else {
           removePuiLengthGroup();
+          removePuiScalesGroup();
           createPuiPlayheadsGroup();
         }
         break;
@@ -83,7 +93,10 @@ class BottomButton {
         // midi
         break;
       case 5:
-        // saveload
+        // save
+        break;
+      case 6:
+        // load
         break;
     }
   }
