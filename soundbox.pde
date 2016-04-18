@@ -150,8 +150,22 @@ class Soundbox {
     }
   }
 
+  String deNormalizeScaleName() {
+    String denorm = scaleRoot.toUpperCase();
+    switch(denorm) {
+      case "D#": 
+        return "Eb";
+      case "G#":
+        return "Ab";
+      case "A#":
+        return "B#";
+      default:
+        return denorm;
+    }
+  }
+
   String currentScaleName() {
-    return scaleRoot.toUpperCase() + " " + scaleType;
+    return deNormalizeScaleName() + " " + scaleType;
   }
 
   void cycleRoot() {
