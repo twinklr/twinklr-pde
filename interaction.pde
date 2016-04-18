@@ -759,6 +759,7 @@ void selectScaleButton(String shortName) {
   String scaleRoot = soundbox.normalizeScaleName(shortName);
   println("Setting scale to", scaleRoot);
   soundbox.scaleRoot = scaleRoot;
+  soundbox.updateScaleSounds();
   updateScalesTitle();
 }
 
@@ -766,6 +767,7 @@ void selectScaleTypeButton(String scaleType) {
   println("Updating scales title to ", scaleType);
 
   soundbox.scaleType = scaleType;
+  soundbox.updateScaleSounds();
   updateScalesTitle();
 }
 
