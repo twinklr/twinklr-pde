@@ -578,21 +578,9 @@ void mousePressed() {
 
 void keyPressed() {
   switch (key) {
-    case '1':
-      if(lengthMenuVisible) {
-        removePuiLengthGroup();
-        // pui.hide();
-      } else {
-        createPuiLengthGroup();
-      }
-      break;
-    case '3':
-      if(playheadsMenuVisible) {
-        removePuiPlayheadsGroup();
-        // pui.hide();
-      } else {
-        createPuiPlayheadsGroup();
-      }
+    case 'p':
+      midibox.panic();
+      println("PANIC");
       break;
   }
 }

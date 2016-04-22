@@ -5,6 +5,7 @@ Stave stave;
 PlayheadManager playheadManager;
 Playhead playhead;
 Soundbox soundbox;
+Midibox midibox;
 
 PImage loadingImg;
 boolean loaded = false;
@@ -34,11 +35,16 @@ void draw() {
 
     int noteCount = 15;
 
-    soundbox = new Soundbox(noteCount, this);
+    midibox = new Midibox(this);
+
+    soundbox = new Soundbox(noteCount, midibox, this);
     stave = new Stave(noteCount, soundbox, this);
     playheadManager = new PlayheadManager(stave, this);
 
+
+
     setupGui();
+    prepareExitHandler();
     loaded = true;
   }
 
@@ -52,4 +58,15 @@ void draw() {
   for (int i = 0; i < bottomButtons.length; i++ ) {
     bottomButtons[i].render();
   }
+}
+
+private void prepareExitHandler () {
+  Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+    public void run () {
+      System.out.println("SHUTDOWN HOOK");
+
+      // application exit code here
+      midibox.midiBus.clearAll();
+    }
+  }));
 }

@@ -6,6 +6,7 @@ class Soundbox {
   HashMap<String, int[]> scales;
   String[] allNotes, scaleNotes;
   String[] allSounds, scaleSounds;
+  Midibox midibox;
   PApplet parent;
   int noteCount;
   
@@ -16,9 +17,10 @@ class Soundbox {
   AudioContext ac;
   Gain gain;
 
-  Soundbox (int nc, PApplet parent) {  
+  Soundbox (int nc, Midibox midibox, PApplet parent) {  
     noteCount = nc;
     this.parent = parent;
+    this.midibox = midibox;
 
     ac = new AudioContext();
     gain = new Gain(ac, 2, 0.2);
@@ -105,7 +107,10 @@ class Soundbox {
     if(i < scaleSounds.length) {
       // get the next SamplePlayer off the shelf
       SamplePlayer sp = players[currentPlayer];
-      
+
+      if(midibox != null) {
+        midibox.playNote(scaleNotes[i]);
+      }
       
       // update its sample
       sp.setSample(SampleManager.sample(scaleSounds[i]));
