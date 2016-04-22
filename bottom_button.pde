@@ -69,6 +69,7 @@ class BottomButton {
           // pui.hide();
         } else {
           removePuiPlayheadsGroup();
+          removePuiMidiGroup();
           removePuiScalesGroup();
           removePuiSaveGroup();
           removePuiLoadGroup();
@@ -82,6 +83,7 @@ class BottomButton {
           // pui.hide();
         } else {
           removePuiPlayheadsGroup();
+          removePuiMidiGroup();
           removePuiLengthGroup();
           removePuiSaveGroup();
           removePuiLoadGroup();
@@ -95,6 +97,7 @@ class BottomButton {
           // pui.hide();
         } else {
           removePuiLengthGroup();
+          removePuiMidiGroup();
           removePuiScalesGroup();
           removePuiSaveGroup();
           removePuiLoadGroup();
@@ -102,6 +105,17 @@ class BottomButton {
         }
         break;
       case 4:
+        if(midiMenuVisible) {
+          removePuiMidiGroup();
+        } else {
+          removePuiLengthGroup();
+          removePuiMidiGroup();
+          removePuiScalesGroup();
+          removePuiPlayheadsGroup();
+          removePuiLoadGroup();
+          removePuiSaveGroup(); 
+          createPuiMidiGroup();
+        }
         // midi
         break;
       case 5:
@@ -111,6 +125,7 @@ class BottomButton {
           // pui.hide();
         } else {
           removePuiLengthGroup();
+          removePuiMidiGroup();
           removePuiScalesGroup();
           removePuiPlayheadsGroup();
           removePuiLoadGroup();
@@ -126,6 +141,7 @@ class BottomButton {
           removePuiLengthGroup();
           removePuiScalesGroup();
           removePuiPlayheadsGroup();
+          removePuiMidiGroup();
           removePuiSaveGroup();
           createPuiLoadGroup();
         }

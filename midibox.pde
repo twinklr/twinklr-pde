@@ -5,12 +5,13 @@ class Midibox {
   int transpose,gateDuration, channel, velocity;
   String[] allNotes;
   MidiBus midiBus; // The MidiBus
+  String currentBusName;
 
   Midibox (PApplet parent) {  
     this.transpose = 0;
     this.gateDuration = 250;
     this.channel = 0;
-    this.velocity = 100;
+    this.velocity = 100;;
 
     int[] octaves = {3,4,5,6};
     String[] notes = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
@@ -28,8 +29,21 @@ class Midibox {
 
     // println(allNotes);
     MidiBus.list();
-    this.midiBus = new MidiBus(parent,-1,"Port 1");
+    // this.midiBus = new MidiBus(parent,-1,"Port 1");
+  }
+
+  void updateMidiBus(String busName) {
+    if(this.midiBus != null) {
+      this.midiBus.close();
+    }
+    this.midiBus = new MidiBus(parent,-1,busName);
+    this.currentBusName = busName;
   } 
+
+  void removeMidiBus() {
+    this.midiBus.close();
+    this.currentBusName = null;
+  }
 
   int noteValue(String noteString) {
     int cThree = 60;
@@ -44,6 +58,9 @@ class Midibox {
   }
 
   void playNote(String noteString) {
+    if(currentBusName == null) {
+      return;
+    }
     int noteValue = noteValue(noteString);
     if(noteValue > 0) {
       midiBus.sendNoteOn(channel, noteValue, velocity); // Send a Midi noteOn
@@ -53,11 +70,13 @@ class Midibox {
   }
 
   void panic() {
-    for(int i = 0; i < allNotes.length; i++) {
-      int noteValue = noteValue(allNotes[i]);
-      if(noteValue > 0) {
-        println("Note off",noteValue);
-        midiBus.sendNoteOff(channel, noteValue, velocity); // Send a Midi noteOn
+    if(midiBus != null) {
+      for(int i = 0; i < allNotes.length; i++) {
+        int noteValue = noteValue(allNotes[i]);
+        if(noteValue > 0) {
+          println("Note off",noteValue);
+          midiBus.sendNoteOff(channel, noteValue, velocity); // Send a Midi noteOn
+        }
       }
     }
   }

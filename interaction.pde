@@ -25,12 +25,14 @@ void setupGui() {
 com.martinleopold.pui.Slider speed1Slider, offset1Slider, speed2Slider, offset2Slider, speed3Slider, offset3Slider, speed4Slider, offset4Slider;
 com.martinleopold.pui.Button playhead1Backwards, playhead1Forwards, playhead1Toggle, playhead2Backwards, playhead2Forwards, playhead2Toggle, playhead3Backwards, playhead3Forwards, playhead3Toggle, playhead4Backwards, playhead4Forwards, playhead4Toggle;
 com.martinleopold.pui.Label scalesTitle;
+com.martinleopold.pui.Label midiTitle;
 
 boolean playheadsMenuVisible = false;
 boolean lengthMenuVisible = false;
 boolean scalesMenuVisible = false;
 boolean saveMenuVisible = false;
 boolean loadMenuVisible = false;
+boolean midiMenuVisible = false;
 
 void createPuiLengthGroup() {
   lengthMenuVisible = true;
@@ -452,6 +454,102 @@ void createPuiScalesGroup() {
     com.martinleopold.pui.Button b = pui.addButton().label(scaleTypes[i].toUpperCase()).size(5,5).calls(buttonName);
     b.position(startX + (i*7),startY);
   }
+}
+
+// PUI MIDI interactions
+
+void removePuiMidiGroup() {
+  pui.hide();
+  midiMenuVisible = false;
+  stave.canEdit = true; 
+}
+
+void createPuiMidiGroup() {
+  midiMenuVisible = true;
+  stave.canEdit = false;
+
+  pui = PUI.init(this).size(300, height-40).theme("Grayday");
+  pui.padding(1, 0.5); // set padding (in grid units)
+  pui.font("deja.ttf"); // set font
+  pui.toggleGrid();
+
+  pui.columnWidth(30);
+
+  pui.addLabel("MIDI").large();
+  pui.addDivider();
+
+  midiTitle = pui.addLabel("");
+  pui.newRow();
+
+  if(midibox.currentBusName != null) {
+    midiTitle.text("Current port: " + midibox.currentBusName);
+  } else {
+    midiTitle.text("Current port: NONE");
+  }
+
+  String[] outputNames = midibox.midiBus.availableOutputs();
+  pui.addButton().label("NONE").size(5,5).calls("midiNone");
+  for(int i = 0; i < 9; i ++) {
+    if(i < outputNames.length) {
+      println("midi" + str(i));
+      pui.addButton().label(outputNames[i]).size(5,5).calls("midi" + str(i));
+    }
+  }
+  pui.newRow();
+  pui.addDivider();
+  pui.newRow();
+  pui.addButton().label("PANIC").size(5,5).calls("midiPanic");
+}
+
+void midiNone() {
+  midibox.removeMidiBus();
+  midiTitle.text("Current port: NONE");
+}
+
+void midiPanic() {
+  midibox.panic();
+}
+
+void pickMidiPort(int port) {
+  String string = midibox.midiBus.availableOutputs()[port];
+  midibox.updateMidiBus(string);
+  midiTitle.text("Current port: " + midibox.currentBusName);
+}
+
+void midi0() {
+  pickMidiPort(0);
+}
+
+void midi1() {
+  pickMidiPort(1);
+}
+
+void midi2() {
+  pickMidiPort(2);
+}
+
+void midi3() {
+  pickMidiPort(3);
+}
+
+void midi4() {
+  pickMidiPort(4);
+}
+
+void midi5() {
+  pickMidiPort(5);
+}
+
+void midi6() {
+  pickMidiPort(6);
+}
+
+void midi7() {
+  pickMidiPort(7);
+}
+
+void midi8() {
+  pickMidiPort(8);
 }
 
 // PUI Save Load interactions

@@ -66,7 +66,9 @@ private void prepareExitHandler () {
       System.out.println("SHUTDOWN HOOK");
 
       // application exit code here
-      midibox.midiBus.clearAll();
+      if(midibox.currentBusName != null) {
+        midibox.midiBus.clearAll();
+      }
     }
   }));
 }
