@@ -471,7 +471,7 @@ void createPuiMidiGroup() {
   pui = PUI.init(this).size(300, height-40).theme("Grayday");
   pui.padding(1, 0.5); // set padding (in grid units)
   pui.font("deja.ttf"); // set font
-  pui.toggleGrid();
+  // pui.toggleGrid();
 
   pui.columnWidth(30);
 
