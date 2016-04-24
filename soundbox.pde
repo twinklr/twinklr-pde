@@ -9,6 +9,7 @@ class Soundbox {
   Midibox midibox;
   PApplet parent;
   int noteCount;
+  boolean muted;
   
   int polyphony = 16;
   int currentPlayer = 0;
@@ -29,6 +30,8 @@ class Soundbox {
 
     buildScales();
     setupAllSounds();
+
+    muted = false;
 
     scaleType = "major";
     scaleRoot = "c";
@@ -105,8 +108,13 @@ class Soundbox {
 
   void playSound(int i) {
     if(midibox != null) {
-        midibox.playNote(scaleNotes[i]);
-      }
+      midibox.playNote(scaleNotes[i]);
+    }
+
+    if(muted) {
+      return;
+    }
+
     if(i < scaleSounds.length) {
       // get the next SamplePlayer off the shelf
       SamplePlayer sp = players[currentPlayer];

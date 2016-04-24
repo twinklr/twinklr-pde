@@ -23,9 +23,8 @@ void setupGui() {
 }
 
 com.martinleopold.pui.Slider speed1Slider, offset1Slider, speed2Slider, offset2Slider, speed3Slider, offset3Slider, speed4Slider, offset4Slider, midiGateSlider, midiTransposeSlider;
-com.martinleopold.pui.Button playhead1Backwards, playhead1Forwards, playhead1Toggle, playhead2Backwards, playhead2Forwards, playhead2Toggle, playhead3Backwards, playhead3Forwards, playhead3Toggle, playhead4Backwards, playhead4Forwards, playhead4Toggle;
-com.martinleopold.pui.Label scalesTitle;
-com.martinleopold.pui.Label midiTitle;
+com.martinleopold.pui.Button playhead1Backwards, playhead1Forwards, playhead1Toggle, playhead2Backwards, playhead2Forwards, playhead2Toggle, playhead3Backwards, playhead3Forwards, playhead3Toggle, playhead4Backwards, playhead4Forwards, playhead4Toggle, muteToggle;
+com.martinleopold.pui.Label scalesTitle, midiTitle;
 
 boolean playheadsMenuVisible = false;
 boolean lengthMenuVisible = false;
@@ -57,7 +56,9 @@ void removePuiLengthGroup() {
   pui.hide();
   lengthMenuVisible = false;
   stave.canEdit = true;
-  bottomButtons[0].deselectAll();
+  if(bottomButtons[0].selected) {
+    bottomButtons[0].selected = false;
+  }
 }
 
 void createPuiPlayheadsGroup() {
@@ -511,6 +512,21 @@ void createPuiMidiGroup() {
   
   pui.newRow();
   pui.addButton().label("PANIC").size(5,5).calls("midiPanic");
+  muteToggle = pui.addButton().label("").size(5,5).calls("muteToggle");
+  if(soundbox.muted) {
+    muteToggle.label("UNMUTE AUDIO");
+  } else {
+    muteToggle.label("MUTE AUDIO");
+  }
+}
+
+void muteToggle() {
+  soundbox.muted = !soundbox.muted;
+ if(soundbox.muted) {
+    muteToggle.label("UNMUTE AUDIO");
+  } else {
+    muteToggle.label("MUTE AUDIO");
+  } 
 }
 
 void midiNone() {
