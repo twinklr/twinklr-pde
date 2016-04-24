@@ -22,7 +22,7 @@ void setupGui() {
   createBottomButtons();
 }
 
-com.martinleopold.pui.Slider speed1Slider, offset1Slider, speed2Slider, offset2Slider, speed3Slider, offset3Slider, speed4Slider, offset4Slider;
+com.martinleopold.pui.Slider speed1Slider, offset1Slider, speed2Slider, offset2Slider, speed3Slider, offset3Slider, speed4Slider, offset4Slider, midiGateSlider, midiTransposeSlider;
 com.martinleopold.pui.Button playhead1Backwards, playhead1Forwards, playhead1Toggle, playhead2Backwards, playhead2Forwards, playhead2Toggle, playhead3Backwards, playhead3Forwards, playhead3Toggle, playhead4Backwards, playhead4Forwards, playhead4Toggle;
 com.martinleopold.pui.Label scalesTitle;
 com.martinleopold.pui.Label midiTitle;
@@ -476,6 +476,7 @@ void createPuiMidiGroup() {
   pui.columnWidth(30);
 
   pui.addLabel("MIDI").large();
+  pui.newRow();
   pui.addDivider();
 
   midiTitle = pui.addLabel("");
@@ -497,6 +498,16 @@ void createPuiMidiGroup() {
   }
   pui.newRow();
   pui.addDivider();
+  
+  pui.newRow();
+  pui.addLabel("Transpose");
+  pui.newRow();
+  midiTransposeSlider = pui.addSlider().size(16,4).label(str(midibox.transpose)).calls("midiTransposeValue").min(-3).max(3).value(midibox.transpose);
+  pui.newRow();
+  pui.addLabel("Gate Length");
+  pui.newRow();
+  midiGateSlider = pui.addSlider().size(16,4).label(str(midibox.gateDuration)).calls("midiGateValue").min(50).max(500).value(midibox.gateDuration);
+  
   pui.newRow();
   pui.addButton().label("PANIC").size(5,5).calls("midiPanic");
 }
@@ -504,6 +515,20 @@ void createPuiMidiGroup() {
 void midiNone() {
   midibox.removeMidiBus();
   midiTitle.text("Current port: NONE");
+}
+
+void midiTransposeValue(float v) {
+  int newValue = (int)(Math.round(v));  
+  midiTransposeSlider.value(newValue);
+  midibox.transpose = newValue;
+  midiTransposeSlider.label(str(newValue));
+}
+
+void midiGateValue(float v) {
+  int newValue = (int)(Math.floor(v/50) * 50);  
+  midiGateSlider.value(newValue);
+  midibox.gateDuration = newValue;
+  midiGateSlider.label(str(newValue)); //<>//
 }
 
 void midiPanic() {

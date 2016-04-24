@@ -104,14 +104,13 @@ class Soundbox {
   }
 
   void playSound(int i) {
+    if(midibox != null) {
+        midibox.playNote(scaleNotes[i]);
+      }
     if(i < scaleSounds.length) {
       // get the next SamplePlayer off the shelf
       SamplePlayer sp = players[currentPlayer];
 
-      if(midibox != null) {
-        midibox.playNote(scaleNotes[i]);
-      }
-      
       // update its sample
       sp.setSample(SampleManager.sample(scaleSounds[i]));
       // set it to the beginning and play it

@@ -50,7 +50,7 @@ class Midibox {
 
     for(int i = 0; i < allNotes.length; i++) {
       if(allNotes[i].equals(noteString.toLowerCase())) {
-        return cThree + i + this.transpose;
+        return cThree + i + (this.transpose * 12); //<>//
       }
     }
 
