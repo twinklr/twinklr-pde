@@ -57,6 +57,7 @@ void removePuiLengthGroup() {
   pui.hide();
   lengthMenuVisible = false;
   stave.canEdit = true;
+  bottomButtons[0].deselectAll();
 }
 
 void createPuiPlayheadsGroup() {
