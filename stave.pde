@@ -111,15 +111,15 @@ class Stave {
 
     // now ask the current scale what that is in its terms
     return soundBox.getScaleIndexFromAbsolute(noteIndex);
-
   }
 
   boolean insideStave(int x, int y) {
     int finger = 5;
     if(x < xPadding-finger) { return false; }
-    if(x > staveWidth+finger) { return false; }
+    if(x > staveWidth+finger+xPadding) { return false; }
     if(y < topPadding-finger) { return false; }
     if(y > (topPadding+staveHeight+finger)) { return false; }
+    println("Inside stave");
     return true;
   }
 
