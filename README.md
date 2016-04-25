@@ -6,6 +6,8 @@ It's designed to be run fullscreen on a Raspberry Pi with touchscreen, though it
 
 ## REQUIREMENTS
 
+Twinklr is written for Processing 3.0.
+
 You'll need the following libraries, installable through the Processing library manager:
 
 * Beads
@@ -13,9 +15,11 @@ You'll need the following libraries, installable through the Processing library 
 * Ani
 * IO
 
-You'll also need Pui installed in your libraries directory.
+You'll also need [Pui][pui] installed in your `libraries` directory.
 
 Once Twinklr has loaded, you can either use it with a mousewheel, or, if running it on a Pi, a quadrature encoder connected to pins 17 and 27.
+
+[pui]: https://github.com/martinleopold/pUI
 
 ## PI-IFYING IT
 
