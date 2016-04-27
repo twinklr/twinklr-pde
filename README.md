@@ -32,3 +32,8 @@ To make Twinklr run on a Raspberry Pi with 7" touchscreen, there are a few obvio
 5. rename `io.pde.pi` to `io.pde`
 
 Then, the whole application should compile and run fullscreen on the Raspberry Pi.
+
+## Shutdown script
+
+`shutdown.py` should be run at startup. It waits for pin 18 to go low, and when
+it does, it shuts the Pi down.
