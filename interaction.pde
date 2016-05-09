@@ -697,7 +697,7 @@ void removePuiLoadGroup() {
 // Mouse Interactions
 
 void mouseDragged() {
-  if(stave.alteringLength) {
+  if(stave.alteringLength && (mouseX > 270)) {
     stave.updateWidthFromAbs(mouseX);
     playheadManager.updatePlayheadsToWidth();
   }
