@@ -704,7 +704,7 @@ void mouseDragged() {
 }
 
 void mousePressed() {
-  if(stave.insideStave(mouseX,mouseY)) {
+  if(stave.insideStave(mouseX,mouseY) && !stave.alteringLength) {
     stave.click(mouseX, mouseY);
   }
 
@@ -727,6 +727,16 @@ void keyPressed() {
 
 void mouseWheel(MouseEvent event) {
   float e = event.getCount();
+  
+  //float mouseWheelScale = 2;
+  
+  //e = e / mouseWheelScale;
+  
+  if(e > 5) {
+    e = 5;
+  } else if(e < -5) {
+    e = -5;
+  }
 
   playheadManager.modifyPositionBy(e);
 }

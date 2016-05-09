@@ -11,7 +11,7 @@ class Soundbox {
   int noteCount;
   boolean muted;
   
-  int polyphony = 16;
+  int polyphony = 8;
   int currentPlayer = 0;
   SamplePlayer[] players = new SamplePlayer[polyphony];
 
