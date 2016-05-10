@@ -673,7 +673,8 @@ void createPuiLoadGroup() {
       b.label(str(i+1) + " (EMPTY)");
       b.deactivate();
     }
-  }  
+  }
+
   for (int i = 4; i < 8; i++) {
     String buttonName = "load" + (i+1) + "But";
     com.martinleopold.pui.Button b = pui.addButton().label(str(i+1)).size(5,5).calls(buttonName);
@@ -686,6 +687,11 @@ void createPuiLoadGroup() {
       b.deactivate();
     }
   }  
+
+  // create a clear button.
+
+  com.martinleopold.pui.Button b = pui.addButton().label("CLEAR").size(5,5).calls("clearStave");
+  b.position(startX, startY + (4*colSpacing));
 }
 
 void removePuiLoadGroup() {
@@ -889,6 +895,32 @@ void loadTune(String filename) {
   store = new Storage(stave,soundbox);
   tuneXml = loadXML(filename);
   store.xmlToTune(tuneXml);
+  removePuiLoadGroup();
+  bottomButtons[0].deselectAll();
+}
+
+void clearStave() {
+ // reset the soundbox
+  soundbox.scaleRoot = "c";
+  soundbox.scaleType = "major";
+  soundbox.updateScaleSounds();
+
+  // clear out any notes we've got
+  stave.reset();
+
+  // set default playhead to beginning
+  playheadManager.playheads[0].position = 0;
+
+  // disable all existing playheads > 0
+  for (int i = 1; i < playheadManager.playheads.length; i ++ ) {
+    playheadManager.playheads[i].deactivate();
+    playheadManager.playheads[i].speed = 1.0;
+    playheadManager.playheads[i].directionOffset = 1;
+    playheadManager.playheads[i].direction = 1;
+    playheadManager.playheads[i].offset = 0;
+    playheadManager.playheads[i].position = playheadManager.playheads[0].position;
+  }
+
   removePuiLoadGroup();
   bottomButtons[0].deselectAll();
 }
