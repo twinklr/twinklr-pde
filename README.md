@@ -35,5 +35,5 @@ Then, the whole application should compile and run fullscreen on the Raspberry P
 
 ## Shutdown script
 
-`shutdown.py` should be run at startup. It waits for pin 18 to go low, and when
+`shutdown.py` should be run at startup on the Pi. It waits for pin 18 to go low, and when
 it does, it shuts the Pi down.

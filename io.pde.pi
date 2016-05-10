@@ -3,8 +3,8 @@ int rotaryB = 0;
 int newState = 0;
 int lastState = 0;
 
-int pinA = 17;
-int pinB = 27;
+int pinA = 27;
+int pinB = 17;
 
 
 // watch pins
