@@ -87,11 +87,9 @@ class Playhead {
     // notify stave if we've changed direction
     if((direction == 1) && (amt < 0)) {
       direction = 1 - direction;
-      clearPlayed();
     }
     if((direction == 0) && (amt > 0)) {
       direction = 1 - direction;
-      clearPlayed();
     }
 
     if(position > stave.staveWidth) {
@@ -115,6 +113,13 @@ class Playhead {
           println(playedNotes.indexOf(n.hashCode()));
         } else {
           // println("But I won't: Note in played list at index ", playedNotes.indexOf(n.hashCode()));
+        }
+      } else {
+        // if it's in the played list, and we're not intersecting it
+        // remove it
+        if(playedNotes.indexOf(n.hashCode()) > -1) {
+          int i = playedNotes.indexOf(n.hashCode());
+          playedNotes.remove(i);
         }
       }
     }
