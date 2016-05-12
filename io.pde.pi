@@ -10,13 +10,17 @@ int pinB = 17;
 // watch pins
 
 void updatePinA(int pin) {
+  GPIO.noInterrupts();
   rotaryA = GPIO.digitalRead(pinA); 
   updatePosition();
+  GPIO.interrupts();
 }
 
 void updatePinB(int pin) {
+  GPIO.noInterrupts();
   rotaryB = GPIO.digitalRead(pinB); 
   updatePosition();
+  GPIO.interrupts();
 }
 
 // update position based on pins

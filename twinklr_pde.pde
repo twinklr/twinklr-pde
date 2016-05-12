@@ -22,23 +22,25 @@ void setup() {
   background(loadingImg);  
 
   // begin RPi mode
-  // noInterrupts();
+  // GPIO.noInterrupts();
   // delay(10);
 
   // GPIO.pinMode(pinA, GPIO.INPUT);
   // delay(10);
+  // GPIO.pinMode(pinB, GPIO.INPUT);
+  // delay(10);
+
+
   // GPIO.releaseInterrupt(pinA);
   // delay(10);
   // GPIO.attachInterrupt(pinA, this, "updatePinA", GPIO.CHANGE);
   // delay(10);
-  
-  // GPIO.pinMode(pinB, GPIO.INPUT);
-  // delay(10);
+   
   // GPIO.releaseInterrupt(pinB);
   // delay(10);
   // GPIO.attachInterrupt(pinB, this, "updatePinB", GPIO.CHANGE);
   // delay(10);
-  // interrupts();
+  // GPIO.interrupts();
   // delay(10);
 }
 
