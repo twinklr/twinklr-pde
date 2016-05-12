@@ -1,5 +1,5 @@
 class Playhead {
-  int position;
+  float position;
   int direction;
   int directionOffset; // 1 or -1
   int offset; // in integer pixels
@@ -48,7 +48,7 @@ class Playhead {
     return directionOffset < 0;
   }
 
-  void changeOffset(int o, int reference) {
+  void changeOffset(int o, float reference) {
     offset = o;
     position = reference + o;
     if(position > stave.staveWidth) {
@@ -63,7 +63,7 @@ class Playhead {
     strokeWeight(2);
     stroke(col);
 
-    int x = position + stave.xPadding;
+    float x = position + stave.xPadding;
     
     line(x,0,x,height);
   }

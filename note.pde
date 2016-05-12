@@ -63,7 +63,7 @@ class Note {
     stave.notes.remove(this);
   }
  
-  boolean intersectedBy(int xPos) {
+  boolean intersectedBy(float xPos) {
     if(((xPos) > (x-radius)) && ((xPos) < x+radius)) {
       return true;
     } else {
