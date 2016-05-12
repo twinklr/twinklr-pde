@@ -21,11 +21,25 @@ void setup() {
   deja = createFont("deja.ttf",14);
   background(loadingImg);  
 
+  // begin RPi mode
+  // noInterrupts();
+  // delay(10);
+
   // GPIO.pinMode(pinA, GPIO.INPUT);
+  // delay(10);
+  // GPIO.releaseInterrupt(pinA);
+  // delay(10);
   // GPIO.attachInterrupt(pinA, this, "updatePinA", GPIO.CHANGE);
+  // delay(10);
   
   // GPIO.pinMode(pinB, GPIO.INPUT);
+  // delay(10);
+  // GPIO.releaseInterrupt(pinB);
+  // delay(10);
   // GPIO.attachInterrupt(pinB, this, "updatePinB", GPIO.CHANGE);
+  // delay(10);
+  // interrupts();
+  // delay(10);
 }
 
 void draw() {
