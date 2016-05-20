@@ -37,3 +37,16 @@ Then, the whole application should compile and run fullscreen on the Raspberry P
 
 `shutdown.py` should be run at startup on the Pi. It waits for pin 18 to go low, and when
 it does, it shuts the Pi down.
+
+
+## License
+
+See `license.txt` for details.
+
+## Authors
+
+This software was written by Tom Armitage, tom [at] infovore dot org
+
+## Copyright
+
+Copyright 2016 Tom Armitage.
