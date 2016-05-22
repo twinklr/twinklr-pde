@@ -94,6 +94,10 @@ class Note {
     colors = append(colors, color(255, 179, 38,drawOpacity));
     colors = append(colors, color(126, 212, 210,drawOpacity));
 
-    return colors[i];
+    if(i >= colors.length) {
+      return color(128,128,128,drawOpacity);
+    } else {
+      return colors[i];
+    }
   }
 }
