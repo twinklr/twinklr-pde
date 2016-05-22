@@ -396,7 +396,7 @@ void createPuiScalesGroup() {
   scalesMenuVisible = true;
   stave.canEdit = false;
 
-  pui = PUI.init(this).size(660, height-40).theme("Grayday");
+  pui = PUI.init(this).size(800, height-40).theme("Grayday");
   // pui.toggleGrid();
   pui.padding(0.25, 0.5); // set padding (in grid units)
   pui.font("deja.ttf"); // set font
@@ -409,7 +409,7 @@ void createPuiScalesGroup() {
 
   // black notes
 
-  startX = 12;
+  startX = 20;
   startY = 11;
 
   String[] topScaleButtons = {"C#", "Eb", "F#", "Ab", "Bb"};
@@ -431,7 +431,7 @@ void createPuiScalesGroup() {
   // white notes
 
   String[] bottomScaleButtons = {"C", "D", "E", "F", "G", "A", "B"};
-  startX = 9;
+  startX = 17;
   startY = 19;
 
   for (int i = 0; i < bottomScaleButtons.length; i++) {
@@ -448,7 +448,7 @@ void createPuiScalesGroup() {
   startX = 2;
   startY = 31;
 
-  String[] scaleTypes = { "major", "minor", "dorian", "lydian", "mixolydian", "phrygian", "locrian", "pentatonic", "blues"};
+  String[] scaleTypes = { "major", "minor", "dorian", "lydian", "mixolydian", "phrygian", "locrian", "pentatonic", "blues", "chroma", "whole"};
 
   for (int i = 0; i < scaleTypes.length; i++) {
     String buttonName = "scaleType" + scaleTypes[i] + "But";
@@ -826,7 +826,12 @@ void scaleTypepentatonicBut() {
 void scaleTypebluesBut() {
   selectScaleTypeButton("blues");
 }
-
+void scaleTypechromaBut() {
+  selectScaleTypeButton("chroma");
+}
+void scaleTypewholeBut() {
+  selectScaleTypeButton("whole");
+}
 // end scale type selection
 
 // begin save/load buttons

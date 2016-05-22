@@ -115,9 +115,10 @@ class Soundbox {
       return;
     }
 
-    if(i < scaleSounds.length) {
+    if(scaleSounds[i] != null) {
       // get the next SamplePlayer off the shelf
       SamplePlayer sp = players[currentPlayer];
+      println(scaleSounds[i]);
 
       // update its sample
       sp.setSample(SampleManager.sample(scaleSounds[i]));
@@ -276,5 +277,11 @@ class Soundbox {
 
     int[] bluesScale = {3, 2, 1, 1, 3, 2};
     scales.put("blues", bluesScale);
+
+    int[] chromaScale = {1,1,1,1,1,1,1,1,1,1,1,1};
+    scales.put("chroma", chromaScale);
+
+    int[] wholeScale = {2,2,2,2,2,2};
+    scales.put("whole", wholeScale);
   }
 } 
