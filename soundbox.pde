@@ -107,7 +107,7 @@ class Soundbox {
   }
 
   void playSound(int i) {
-    if(midibox != null) {
+    if(midibox != null && (i < scaleSounds.length)) {
       midibox.playNote(scaleNotes[i]);
     }
 
@@ -115,7 +115,7 @@ class Soundbox {
       return;
     }
 
-    if(scaleSounds[i] != null) {
+    if(i < scaleSounds.length) {
       // get the next SamplePlayer off the shelf
       SamplePlayer sp = players[currentPlayer];
       println(scaleSounds[i]);
@@ -128,6 +128,8 @@ class Soundbox {
       // increment Sample player
       currentPlayer = (currentPlayer + 1) % polyphony;
       
+    } else {
+      println("That note doesn't exist.");
     }
   }
 
