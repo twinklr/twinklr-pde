@@ -618,7 +618,7 @@ void createPuiSaveGroup() {
     String buttonName = "save" + (i+1) + "But";
     com.martinleopold.pui.Button b = pui.addButton().label(str(i+1)).size(5,5).calls(buttonName);
     b.position(startX, startY + (i*colSpacing));
-    File f = new File(dataPath(str(i+1) + ".xml"));
+    File f = new File(sketchPath("data/" + str(i+1) + ".xml"));
     if(f.exists()) {
       b.label(str(i+1));
     } else {
@@ -629,7 +629,7 @@ void createPuiSaveGroup() {
     String buttonName = "save" + (i+1) + "But";
     com.martinleopold.pui.Button b = pui.addButton().label(str(i+1)).size(5,5).calls(buttonName);
     b.position(startX+colSpacing, startY + ((i-4)*colSpacing));
-    File f = new File(dataPath(str(i+1) + ".xml"));
+    File f = new File(sketchPath("data/" + str(i+1) + ".xml"));
     if(f.exists()) {
       b.label(str(i+1));
     } else {
@@ -666,7 +666,7 @@ void createPuiLoadGroup() {
     String buttonName = "load" + (i+1) + "But";
     com.martinleopold.pui.Button b = pui.addButton().label(str(i+1)).size(5,5).calls(buttonName);
     b.position(startX, startY + (i*colSpacing));
-    File f = new File(dataPath(str(i+1) + ".xml"));
+    File f = new File(sketchPath("data/" + str(i+1) + ".xml"));
     if(f.exists()) {
       b.label(str(i+1));
     } else {
@@ -679,7 +679,7 @@ void createPuiLoadGroup() {
     String buttonName = "load" + (i+1) + "But";
     com.martinleopold.pui.Button b = pui.addButton().label(str(i+1)).size(5,5).calls(buttonName);
     b.position(startX+colSpacing, startY + ((i-4)*colSpacing));
-    File f = new File(dataPath(str(i+1) + ".xml"));
+    File f = new File(sketchPath("data/" + str(i+1) + ".xml"));
     if(f.exists()) {
       b.label(str(i+1));
     } else {
