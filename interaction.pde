@@ -737,11 +737,12 @@ void mouseWheel(MouseEvent event) {
   //float mouseWheelScale = 2;
   
   //e = e / mouseWheelScale;
+  int wheelDebounce = 2;
   
-  if(e > 5) {
-    e = 5;
-  } else if(e < -5) {
-    e = -5;
+  if(e > wheelDebounce) {
+    e = 4;
+  } else if(e < (0 - wheelDebounce)) {
+    e = -4;
   }
 
   playheadManager.modifyPositionBy(e);
